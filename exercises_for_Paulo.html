@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python in Browser</title>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.22.1/full/pyodide.js"></script>
+</head>
+<body>
+    <h1>Math Quiz</h1>
+    <label for="num_problems">How many problems do you want?</label>
+    <input type="number" id="num_problems" min="1" required>
+    <button onclick="runPython()">Generate Problems</button>
+    <ul id="problems"></ul>
+
+    <script>
+        async function runPython() {
+            let pyodide = await loadPyodide();
+            let num = document.getElementById("num_problems").value;
+            let pythonCode = `
+import random
+
+def division_problems(num):
+    problems = []
+    count = 0
+
+    while count < num:
+        dividend = random.randint(1000, 9999)
+        divisor = random.randint(2, 9)
+
+        if dividend % divisor == 0:
+            problems.append(f"How much is {dividend} ÷ {divisor}?")
+            count += 1
+
+    problems
+
+problems = division_problems(int(${num}))
+problems
+            `;
+            let result = await pyodide.runPythonAsync(pythonCode);
+            let problemList = document.getElementById("problems");
+            problemList.innerHTML = ""; // Clear previous results
+
+            for (let problem of result.toJs()) {
+                let li = document.createElement("li");
+                li.innerText = problem;
+                problemList.appendChild(li);
+            }
+        }
+    </script>
+</body>
+</html>
