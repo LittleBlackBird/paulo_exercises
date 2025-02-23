@@ -15,8 +15,14 @@
 
     <script>
         async function runPython() {
-            let pyodide = await loadPyodide();
-            let num = document.getElementById("num_problems").value;
+            let pyodide = await loadPyodide(); // Load Pyodide
+
+            let num = document.getElementById("num_problems").value; // Get user input
+            if (!num || num < 1) {
+                alert("Please enter a valid number.");
+                return;
+            }
+
             let pythonCode = `
 import random
 
@@ -32,19 +38,24 @@ def division_problems(num):
             problems.append(f"How much is {dividend} ÷ {divisor}?")
             count += 1
 
-    problems
+    return problems
 
-problems = division_problems(int(${num}))
-problems
+division_problems(int(${num}))
             `;
-            let result = await pyodide.runPythonAsync(pythonCode);
-            let problemList = document.getElementById("problems");
-            problemList.innerHTML = ""; // Clear previous results
 
-            for (let problem of result.toJs()) {
-                let li = document.createElement("li");
-                li.innerText = problem;
-                problemList.appendChild(li);
+            try {
+                let result = await pyodide.runPythonAsync(pythonCode); // Run Python code
+                let problemList = document.getElementById("problems");
+                problemList.innerHTML = ""; // Clear previous results
+
+                for (let problem of result.toJs()) {
+                    let li = document.createElement("li");
+                    li.innerText = problem;
+                    problemList.appendChild(li);
+                }
+            } catch (error) {
+                console.error("Python Error:", error);
+                alert("An error occurred while generating problems.");
             }
         }
     </script>
