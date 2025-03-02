@@ -18,8 +18,8 @@
             let pyodide = await loadPyodide(); // Load Pyodide
 
             let num = document.getElementById("num_problems").value; // Get user input
-            if (!num || num < 1) {
-                alert("Please enter a valid number.");
+            if (!num || 21 < num < 1) {
+                alert("This is too much, Paulo. Please enter a valid number.");
                 return;
             }
 
