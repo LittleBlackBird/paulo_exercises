@@ -44,15 +44,17 @@ def division_problems(num):
 division_problems(int(${num}))
             `;
 
-    try {
+try {
     let result = await pyodide.runPythonAsync(pythonCode); // Run Python code
 
-    // Find the <ol> element or create one if it doesn't exist
+    // Ensure the container is an ordered list <ol>
     let problemList = document.getElementById("problems");
-    if (!problemList) {
-        problemList = document.createElement("ol");
+
+    if (!problemList || problemList.tagName.toLowerCase() !== "ol") {
+        console.warn("The element with id 'problems' is missing or not an <ol>.");
+        problemList = document.createElement("ol");  // Create a new <ol>
         problemList.id = "problems";
-        document.body.appendChild(problemList); // Append to body (or another container)
+        document.body.appendChild(problemList); // Append it to body or a specific container
     }
 
     problemList.innerHTML = ""; // Clear previous results
@@ -67,6 +69,7 @@ division_problems(int(${num}))
     console.error("Python Error:", error);
     alert("An error occurred while generating problems.");
 }
+
 
         }
     </script>
