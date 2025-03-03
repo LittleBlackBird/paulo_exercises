@@ -33,7 +33,7 @@ def division_problems(num):
 
     while count < num:
         dividend = random.randint(1000, 9999)
-        divisor = random.randint(2, 9)
+        divisor = random.randint(4, 9)
 
         if dividend % divisor == 0:
             problems.append(f"How much is {dividend} ÷ {divisor}?")
@@ -44,20 +44,30 @@ def division_problems(num):
 division_problems(int(${num}))
             `;
 
-            try {
-                let result = await pyodide.runPythonAsync(pythonCode); // Run Python code
-                let problemList = document.getElementById("problems");
-                problemList.innerHTML = ""; // Clear previous results
+    try {
+    let result = await pyodide.runPythonAsync(pythonCode); // Run Python code
 
-                for (let problem of result.toJs()) {
-                    let li = document.createElement("li");
-                    li.innerText = problem;
-                    problemList.appendChild(li);
-                }
-            } catch (error) {
-                console.error("Python Error:", error);
-                alert("An error occurred while generating problems.");
-            }
+    // Find the <ol> element or create one if it doesn't exist
+    let problemList = document.getElementById("problems");
+    if (!problemList) {
+        problemList = document.createElement("ol");
+        problemList.id = "problems";
+        document.body.appendChild(problemList); // Append to body (or another container)
+    }
+
+    problemList.innerHTML = ""; // Clear previous results
+
+    // Convert Python result to JS array and populate <ol>
+    for (let problem of result.toJs()) {
+        let li = document.createElement("li");
+        li.innerText = problem;
+        problemList.appendChild(li);
+    }
+} catch (error) {
+    console.error("Python Error:", error);
+    alert("An error occurred while generating problems.");
+}
+
         }
     </script>
 </body>
