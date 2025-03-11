@@ -22,7 +22,9 @@
             let pyodide = await loadPyodide(); // Load Pyodide
 
             let num = document.getElementById("num_problems").value; // Get user input
-            if (!num || num < 1 || num > 21) {
+            if (!num || num < 1) {
+                alert("Zero não, Zé do Prego. Coloca outro número aí.");
+            if (num > 21) {
                 alert("This is too much, Paulo. Please enter a valid number.");
                 return;
             }
