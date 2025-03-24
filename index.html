@@ -1,35 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exercises for Paulo</title>
-    <script src="https://cdn.jsdelivr.net/pyodide/v0.22.1/full/pyodide.js"></script>
-    <link rel="stylesheet" href="./style.css"/>
-</head>
-<body>
-    <h1>Math Quiz</h1>
-    <label for="num_problems">
-        <h2>Paulo, how many problems do you want to solve?</h2>
-    </label>
-    <input type="number" id="num_problems" min="1" required>
-    <button onclick="runPython()">Generate Problems</button>
-    <ol id="problems"></ol>
-    <div class="tenor-gif-embed" data-postid="5738882796937380147" data-share-method="host" data-aspect-ratio="1" data-width="30%"><a href="https://tenor.com/view/silver-the-hedgehog-gif-5738882796937380147">Silver The Hedgehog Sticker</a>from <a href="https://tenor.com/search/silver+the+hedgehog-stickers">Silver The Hedgehog Stickers</a></div> <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+<script>
+    async function runPython() {
+        let pyodide = await loadPyodide();
 
-    <script>
-        async function runPython() {
-            let pyodide = await loadPyodide(); // Load Pyodide
+        let num = document.getElementById("num_problems").value;
+        if (!num || num < 1) {
+            alert("Zero não, Zé do Prego. Coloca outro número aí.");
+        } else if (num > 21) {
+            alert("This is too much, Paulo. Please enter a valid number.");
+            return;
+        }
 
-            let num = document.getElementById("num_problems").value; // Get user input
-            if (!num || num < 1) {
-                alert("Zero não, Zé do Prego. Coloca outro número aí.");
-            } else if (num > 21) {
-                alert("This is too much, Paulo. Please enter a valid number.");
-                return;
-            }
-
-            let pythonCode = `
+        let pythonCode = `
 import random
 
 def division_problems(num):
@@ -41,42 +22,49 @@ def division_problems(num):
         divisor = random.randint(4, 9)
 
         if dividend % divisor == 0:
-            problems.append(f"How much is {dividend} ÷ {divisor}?")
+            answer = dividend // divisor
+            problems.append((f"How much is {dividend} ÷ {divisor}?", answer))
             count += 1
 
     return problems
 
 division_problems(int(${num}))
-            `;
+        `;
 
-try {
-    let result = await pyodide.runPythonAsync(pythonCode); // Run Python code
+        try {
+            let result = await pyodide.runPythonAsync(pythonCode);
 
-    // Ensure the container is an ordered list <ol>
-    let problemList = document.getElementById("problems");
+            let problemList = document.getElementById("problems");
+            problemList.innerHTML = "";
 
-    if (!problemList || problemList.tagName.toLowerCase() !== "ol") {
-        console.warn("The element with id 'problems' is missing or not an <ol>.");
-        problemList = document.createElement("ol");  // Create a new <ol>
-        problemList.id = "problems";
-        document.body.appendChild(problemList); // Append it to body or a specific container
-    }
+            for (let [question, answer] of result.toJs()) {
+                const li = document.createElement("li");
+                li.innerHTML = `
+                    <span>${question}</span>
+                    <input type="number" class="answer-input" placeholder="Your answer">
+                    <button class="check-btn">Check</button>
+                    <span class="feedback" style="margin-left: 10px;"></span>
+                `;
 
-    problemList.innerHTML = ""; // Clear previous results
+                // Add event listener for the "Check" button
+                li.querySelector(".check-btn").addEventListener("click", () => {
+                    const userInput = li.querySelector(".answer-input").value;
+                    const feedback = li.querySelector(".feedback");
 
-    // Convert Python result to JS array and populate <ol>
-    for (let problem of result.toJs()) {
-        let li = document.createElement("li");
-        li.innerText = problem;
-        problemList.appendChild(li);
-    }
-} catch (error) {
-    console.error("Python Error:", error);
-    alert("An error occurred while generating problems.");
-}
+                    if (parseInt(userInput) === answer) {
+                        feedback.textContent = "✅ Correct!";
+                        feedback.style.color = "green";
+                    } else {
+                        feedback.textContent = "❌ Try again.";
+                        feedback.style.color = "red";
+                    }
+                });
 
-
+                problemList.appendChild(li);
+            }
+        } catch (error) {
+            console.error("Python Error:", error);
+            alert("An error occurred while generating problems.");
         }
-    </script>
-</body>
-</html>
+    }
+</script>
