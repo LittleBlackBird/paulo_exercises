@@ -18,6 +18,41 @@
     <div class="tenor-gif-embed" data-postid="5738882796937380147" data-share-method="host" data-aspect-ratio="1" data-width="30%"><a href="https://tenor.com/view/silver-the-hedgehog-gif-5738882796937380147">Silver The Hedgehog Sticker</a>from <a href="https://tenor.com/search/silver+the+hedgehog-stickers">Silver The Hedgehog Stickers</a></div> <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
 
 <script>
+    const imagePaths = [
+        'sonic2.png',
+        'hedge.png',
+        'dino4.png',
+        'pdf_to_png/shadow1_page_1.png',
+        'pdf_to_png/blue_hedge_page_1.png',
+        'pdf_to_png/yellow_hedge_page_1.png',
+        'pdf_to_png/robot_hedge_page_1.png',
+        'pdf_to_png/sonic1_page_1.png'
+    ];
+
+    function showRandomImage() {
+        const img = document.createElement('img');
+        img.src = imagePaths[Math.floor(Math.random() * imagePaths.length)];
+        img.style.position = 'fixed';
+        img.style.width = '150px';
+        img.style.zIndex = 1000;
+        img.style.top = `${Math.random() * 80 + 10}%`;
+        img.style.left = `${Math.random() * 80 + 10}%`;
+        img.style.transition = 'all 2s ease-in-out';
+
+        document.body.appendChild(img);
+
+        // Trigger movement
+        setTimeout(() => {
+            img.style.top = `${Math.random() * 80 + 10}%`;
+            img.style.left = `${Math.random() * 80 + 10}%`;
+        }, 100); // slight delay to apply movement
+
+        // Remove after 2 seconds
+        setTimeout(() => {
+            img.remove();
+        }, 2000);
+    }
+
     async function runPython() {
         let pyodide = await loadPyodide();
 
@@ -35,16 +70,13 @@ import random
 def division_problems(num):
     problems = []
     count = 0
-
     while count < num:
         dividend = random.randint(1000, 9999)
         divisor = random.randint(4, 9)
-
         if dividend % divisor == 0:
             answer = dividend // divisor
             problems.append((f"How much is {dividend} ÷ {divisor}?", answer))
             count += 1
-
     return problems
 
 division_problems(int(${num}))
@@ -65,7 +97,6 @@ division_problems(int(${num}))
                     <span class="feedback" style="margin-left: 10px;"></span>
                 `;
 
-                // Add event listener for the "Check" button
                 li.querySelector(".check-btn").addEventListener("click", () => {
                     const userInput = li.querySelector(".answer-input").value;
                     const feedback = li.querySelector(".feedback");
@@ -73,6 +104,7 @@ division_problems(int(${num}))
                     if (parseInt(userInput) === answer) {
                         feedback.textContent = "✅ Correct!";
                         feedback.style.color = "green";
+                        showRandomImage(); // ← Show moving image on correct answer
                     } else {
                         feedback.textContent = "❌ Try again.";
                         feedback.style.color = "red";
@@ -87,6 +119,7 @@ division_problems(int(${num}))
         }
     }
 </script>
+
 
 </body>
 </html>
