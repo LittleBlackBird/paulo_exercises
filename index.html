@@ -22,18 +22,18 @@
         'sonic2.png',
         'hedge.png',
         'dino4.png',
-        'pdf_to_png/shadow1_page_1.png',
-        'pdf_to_png/blue_hedge_page_1.png',
-        'pdf_to_png/yellow_hedge_page_1.png',
-        'pdf_to_png/robot_hedge_page_1.png',
-        'pdf_to_png/sonic1_page_1.png'
+        'shadow1.png',
+        'blue_hedge.png',
+        'yellow_hedge.png',
+        'robot_hedge.png',
+        'sonic1.png'
     ];
 
     function showRandomImage() {
         const img = document.createElement('img');
         img.src = imagePaths[Math.floor(Math.random() * imagePaths.length)];
         img.style.position = 'fixed';
-        img.style.width = '150px';
+        img.style.width = '300px';
         img.style.zIndex = 1000;
         img.style.top = `${Math.random() * 80 + 10}%`;
         img.style.left = `${Math.random() * 80 + 10}%`;
@@ -50,7 +50,7 @@
         // Remove after 2 seconds
         setTimeout(() => {
             img.remove();
-        }, 2000);
+        }, 5000);
     }
 
     async function runPython() {
