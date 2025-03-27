@@ -72,7 +72,7 @@ def division_problems(num):
     count = 0
     while count < num:
         dividend = random.randint(1000, 9999)
-        divisor = random.randint(3, 10)
+        divisor = random.randint(10, 20)
         if dividend % divisor == 0:
             answer = dividend // divisor
             problems.append((f"How much is {dividend} ÷ {divisor}?", answer))
