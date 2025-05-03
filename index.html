@@ -15,7 +15,7 @@
     <input type="number" id="num_problems" min="1" required>
     <button onclick="runPython()">Generate Problems</button>
     <ol id="problems"></ol>
-    <div class="tenor-gif-embed" data-postid="9311852797231273232" data-share-method="host" data-aspect-ratio="1" data-width="100%"><a href="https://tenor.com/view/bare-bones-steve-wave-minecraft-gif-9311852797231273232">Bare Bones Steve Wave Sticker</a>from <a href="https://tenor.com/search/bare+bones-stickers">Bare Bones Stickers</a></div> <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+    <div class="tenor-gif-embed" data-postid="9311852797231273232" data-share-method="host" data-aspect-ratio="1" data-width="20%"><a href="https://tenor.com/view/bare-bones-steve-wave-minecraft-gif-9311852797231273232">Bare Bones Steve Wave Sticker</a>from <a href="https://tenor.com/search/bare+bones-stickers">Bare Bones Stickers</a></div> <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
 
 <script>
     const imagePaths = [
@@ -72,7 +72,7 @@ def division_problems(num):
     count = 0
     while count < num:
         dividend = random.randint(10000, 99999)
-        divisor = random.randint(1, 100)
+        divisor = random.randint(11, 100)
         if dividend % divisor == 0:
             answer = dividend // divisor
             problems.append((f"How much is {dividend} ÷ {divisor}?", answer))
