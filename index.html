@@ -4,122 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exercises for Paulo</title>
+
+    <!-- Pyodide for Python execution on the quiz page -->
     <script src="https://cdn.jsdelivr.net/pyodide/v0.22.1/full/pyodide.js"></script>
+
+    <!-- External CSS file -->
     <link rel="stylesheet" href="./style.css"/>
 </head>
-<body>
-    <h1>Math Quiz</h1>
-    <label for="num_problems">
-        <h2>Paulo, how many problems do you want to solve?</h2>
-    </label>
-    <input type="number" id="num_problems" min="1" required>
-    <button onclick="runPython()">Generate Problems</button>
-    <ol id="problems"></ol>
-    <div class="tenor-gif-embed" data-postid="9311852797231273232" data-share-method="host" data-aspect-ratio="1" data-width="20%"><a href="https://tenor.com/view/bare-bones-steve-wave-minecraft-gif-9311852797231273232">Bare Bones Steve Wave Sticker</a>from <a href="https://tenor.com/search/bare+bones-stickers">Bare Bones Stickers</a></div> <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+<body data-theme="light">
+    <div class="app">
+        <header class="app-header">
+            <div class="title-block">
+                <h1>Math Quiz</h1>
+                <p class="subtitle">-</p>
+            </div>
 
-<script>
-    const imagePaths = [
-        'sonic2.png',
-        'hedge.png',
-        'dino4.png',
-        'shadow1.png',
-        'blue_hedge.png',
-        'yellow_hedge.png',
-        'robot_hedge.png',
-        'sonic1.png'
-    ];
+            <nav class="app-nav">
+                <a href="index.html" class="nav-link nav-link-active">Quiz</a>
+                <a href="practice.html" class="nav-link">Practice Area</a>
+                <a href="feelings.html" class="nav-link">Reading & Writing</a>
+            </nav>
 
-    function showRandomImage() {
-        const img = document.createElement('img');
-        img.src = imagePaths[Math.floor(Math.random() * imagePaths.length)];
-        img.style.position = 'fixed';
-        img.style.width = '300px';
-        img.style.zIndex = 1000;
-        img.style.top = `${Math.random() * 80 + 10}%`;
-        img.style.left = `${Math.random() * 80 + 10}%`;
-        img.style.transition = 'all 2s ease-in-out';
+            <!-- Theme toggle -->
+            <label class="theme-toggle">
+                <input type="checkbox" id="themeToggle" />
+                <span class="toggle-track">
+                    <span class="toggle-thumb"></span>
+                </span>
+                <span class="toggle-label">Dark mode</span>
+            </label>
+        </header>
 
-        document.body.appendChild(img);
+        <main class="card">
+            <label for="num_problems" class="question-label">
+                Paulo, how many problems do you want to solve?
+            </label>
 
-        // Trigger movement
-        setTimeout(() => {
-            img.style.top = `${Math.random() * 80 + 10}%`;
-            img.style.left = `${Math.random() * 80 + 10}%`;
-        }, 100); // slight delay to apply movement
+            <div class="controls-row">
+                <input type="number" id="num_problems" min="1" required>
+                <button id="generateBtn">Generate Problems</button>
+            </div>
 
-        // Remove after 2 seconds
-        setTimeout(() => {
-            img.remove();
-        }, 5000);
-    }
+            <ol id="problems" class="problems-list"></ol>
 
-    async function runPython() {
-        let pyodide = await loadPyodide();
+            <!-- Tenor GIF -->
+            <div class="tenor-wrapper">
+                <div class="tenor-gif-embed"
+                    data-postid="9311852797231273232"
+                    data-share-method="host"
+                    data-aspect-ratio="1"
+                    data-width="10%">
+                    <a href="https://tenor.com/view/bare-bones-steve-wave-minecraft-gif-9311852797231273232">
+                        Bare Bones Steve Wave Sticker
+                    </a>
+                    from
+                    <a href="https://tenor.com/search/bare+bones-stickers">Bare Bones Stickers</a>
+                </div>
+            </div>
+        </main>
+    </div>
 
-        let num = document.getElementById("num_problems").value;
-        if (!num || num < 1) {
-            alert("Zero não, Zé do Prego. Coloca outro número aí.");
-        } else if (num > 21) {
-            alert("This is too much, Paulo. Please enter a valid number.");
-            return;
-        }
-
-        let pythonCode = `
-import random
-
-def division_problems(num):
-    problems = []
-    count = 0
-    while count < num:
-        dividend = random.randint(10000, 99999)
-        divisor = random.randint(11, 100)
-        if dividend % divisor == 0:
-            answer = dividend // divisor
-            problems.append((f"How much is {dividend} ÷ {divisor}?", answer))
-            count += 1
-    return problems
-
-division_problems(int(${num}))
-        `;
-
-        try {
-            let result = await pyodide.runPythonAsync(pythonCode);
-
-            let problemList = document.getElementById("problems");
-            problemList.innerHTML = "";
-
-            for (let [question, answer] of result.toJs()) {
-                const li = document.createElement("li");
-                li.innerHTML = `
-                    <span>${question}</span>
-                    <input type="number" class="answer-input" placeholder="Your answer">
-                    <button class="check-btn">Check</button>
-                    <span class="feedback" style="margin-left: 10px;"></span>
-                `;
-
-                li.querySelector(".check-btn").addEventListener("click", () => {
-                    const userInput = li.querySelector(".answer-input").value;
-                    const feedback = li.querySelector(".feedback");
-
-                    if (parseInt(userInput) === answer) {
-                        feedback.textContent = "✅ Correct!";
-                        feedback.style.color = "green";
-                        showRandomImage(); // ← Show moving image on correct answer
-                    } else {
-                        feedback.textContent = "❌ Try again.";
-                        feedback.style.color = "red";
-                    }
-                });
-
-                problemList.appendChild(li);
-            }
-        } catch (error) {
-            console.error("Python Error:", error);
-            alert("An error occurred while generating problems.");
-        }
-    }
-</script>
-
-
+    <script async src="https://tenor.com/embed.js"></script>
+    <script src="./script.js"></script>
 </body>
 </html>
