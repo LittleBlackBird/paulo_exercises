@@ -44,7 +44,7 @@ function showRandomImage() {
 const themeToggle = document.getElementById('themeToggle');
 
 (function initTheme() {
-    const saved = localStorage.getItem('theme') || 'light';
+    const saved = localStorage.getItem('theme') || 'dark';
     document.body.setAttribute('data-theme', saved);
     if (themeToggle) {
         themeToggle.checked = saved === 'dark';
