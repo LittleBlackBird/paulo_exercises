@@ -1,53 +1,17 @@
-// ---------- IMAGE REWARD LOGIC (QUIZ PAGE) ----------
-const imagePaths = [
-    'sonic2.png',
-    'hedge.png',
-    'dino4.png',
-    'shadow1.png',
-    'blue_hedge.png',
-    'yellow_hedge.png',
-    'robot_hedge.png',
-    'sonic1.png'
-];
-
-function showRandomImage() {
-    const img = document.createElement('img');
-    img.src = imagePaths[Math.floor(Math.random() * imagePaths.length)];
-    img.style.position = 'fixed';
-    img.style.width = '260px';
-    img.style.zIndex = 1000;
-    img.style.top = `${Math.random() * 80 + 10}%`;
-    img.style.left = `${Math.random() * 80 + 10}%`;
-    img.style.pointerEvents = 'none';
-    img.style.filter = 'drop-shadow(0 18px 40px rgba(15,23,42,0.6))';
-    img.style.transition =
-        'transform 2s ease-in-out, top 2s ease-in-out, left 2s ease-in-out, opacity 0.6s ease-out';
-
-    document.body.appendChild(img);
-
-    setTimeout(() => {
-        img.style.top = `${Math.random() * 80 + 10}%`;
-        img.style.left = `${Math.random() * 80 + 10}%`;
-        img.style.transform = 'translate3d(0, 0, 0) scale(1.08)';
-    }, 60);
-
-    setTimeout(() => {
-        img.style.opacity = '0';
-    }, 4200);
-
-    setTimeout(() => {
-        img.remove();
-    }, 5000);
-}
-
 // ---------- THEME TOGGLE (ALL PAGES) ----------
 const themeToggle = document.getElementById('themeToggle');
 
 (function initTheme() {
-    const saved = localStorage.getItem('theme') || 'dark';
+    const saved =
+        localStorage.getItem('theme') ||
+        document.body.getAttribute("data-theme") ||
+        'dark';
+
     document.body.setAttribute('data-theme', saved);
+
     if (themeToggle) {
         themeToggle.checked = saved === 'dark';
+
         themeToggle.addEventListener('change', (e) => {
             const mode = e.target.checked ? 'dark' : 'light';
             document.body.setAttribute('data-theme', mode);
@@ -56,7 +20,7 @@ const themeToggle = document.getElementById('themeToggle');
     }
 })();
 
-// ---------- QUIZ LOGIC (index.html only) ----------
+// ---------- QUIZ LOGIC (index.html) ----------
 const generateBtn = document.getElementById("generateBtn");
 
 if (generateBtn) {
@@ -128,7 +92,6 @@ division_problems(int(${num}))
                     feedback.textContent = "✅ Correct!";
                     feedback.classList.remove('feedback-wrong');
                     feedback.classList.add('feedback-right');
-                    showRandomImage();
                 } else {
                     feedback.textContent = "❌ Try again.";
                     feedback.classList.remove('feedback-right');
@@ -142,6 +105,27 @@ division_problems(int(${num}))
         console.error("Python Error:", error);
         alert("An error occurred while generating problems.");
     }
+}
+
+// ---------- PRACTICE PAGE: CHECKLIST REWARD VIDEO ----------
+const practiceTasks = document.querySelectorAll(".practice-task");
+const PRACTICE_VIDEO_URL = "Dragon1.mp4";
+let practiceRewardPlayed = false;
+
+function checkPracticeCompletion() {
+    if (!practiceTasks.length || practiceRewardPlayed) return;
+
+    const allDone = Array.from(practiceTasks).every(task => task.checked);
+    if (allDone) {
+        practiceRewardPlayed = true;
+        window.open(PRACTICE_VIDEO_URL, "_blank", "noopener");
+    }
+}
+
+if (practiceTasks.length) {
+    practiceTasks.forEach(task => {
+        task.addEventListener("change", checkPracticeCompletion);
+    });
 }
 
 // ---------- FEELINGS FLASHCARD (feelings.html) ----------
@@ -596,7 +580,6 @@ feelingsBase.forEach(base => {
     });
 });
 
-// Get DOM elements (only exist on feelings.html)
 const revealFeelingBtn = document.getElementById("revealFeelingBtn");
 const feelingCardEl = document.getElementById("feelingCard");
 const feelingEmojiEl = document.getElementById("feelingEmoji");
@@ -605,13 +588,13 @@ const feelingDefinitionEl = document.getElementById("feelingDefinition");
 const feelingStoryEl = document.getElementById("feelingStory");
 const feelingLanguageEl = document.getElementById("feelingLanguage");
 
-// Helper: pick a random card from the 60
+let currentFeeling = null;
+
 function pickRandomFeeling() {
     const index = Math.floor(Math.random() * feelingsData.length);
     return feelingsData[index];
 }
 
-// Helper: get or create one feeling per session (per tab)
 function getSessionFeeling() {
     const storedId = sessionStorage.getItem("currentFeelingId");
     if (storedId) {
@@ -624,9 +607,9 @@ function getSessionFeeling() {
     return picked;
 }
 
-// Render the card
 function renderFeelingCard(feeling) {
     if (!feelingCardEl) return;
+    currentFeeling = feeling;
     feelingEmojiEl.textContent = feeling.emoji;
     feelingNameEl.textContent = feeling.name;
     feelingDefinitionEl.textContent = feeling.definition;
@@ -637,7 +620,6 @@ function renderFeelingCard(feeling) {
     feelingCardEl.classList.remove("hidden");
 }
 
-// Only activate this logic on feelings.html
 if (revealFeelingBtn && feelingCardEl) {
     revealFeelingBtn.addEventListener("click", () => {
         const feeling = getSessionFeeling();
@@ -645,30 +627,57 @@ if (revealFeelingBtn && feelingCardEl) {
     });
 }
 
-// ---------- FEELINGS JOURNAL: "What do you feel right now?" ----------
+// ---------- FEELINGS JOURNAL & HISTORY ----------
 
 const FEELING_NOTE_KEY = "pauloFeelingNoteV1";
+const FEELING_HISTORY_KEY = "pauloFeelingHistoryV1";
 
 const feelingNoteTextarea = document.getElementById("feelingNote");
 const saveFeelingNoteBtn = document.getElementById("saveFeelingNoteBtn");
 const feelingNoteStatus = document.getElementById("feelingNoteStatus");
 
-// Load saved note when page opens
 function loadFeelingNote() {
     if (!feelingNoteTextarea) return;
-
     const saved = localStorage.getItem(FEELING_NOTE_KEY);
     if (saved) {
         feelingNoteTextarea.value = saved;
     }
 }
 
-// Save note to localStorage
+function appendFeelingHistoryEntry(noteText) {
+    if (!noteText) return;
+
+    let history = [];
+    try {
+        const raw = localStorage.getItem(FEELING_HISTORY_KEY);
+        history = raw ? JSON.parse(raw) : [];
+    } catch (e) {
+        history = [];
+    }
+
+    const now = new Date();
+    const entry = {
+        id: Date.now(),
+        timestamp: now.toISOString(),
+        dateLabel: now.toLocaleDateString(),
+        timeLabel: now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        feelingId: currentFeeling ? currentFeeling.id : null,
+        feelingName: currentFeeling ? currentFeeling.name : null,
+        feelingLang: currentFeeling ? currentFeeling.langLabel : null,
+        note: noteText
+    };
+
+    history.push(entry);
+    localStorage.setItem(FEELING_HISTORY_KEY, JSON.stringify(history));
+}
+
 function saveFeelingNote() {
     if (!feelingNoteTextarea) return;
 
     const text = feelingNoteTextarea.value.trim();
     localStorage.setItem(FEELING_NOTE_KEY, text);
+
+    appendFeelingHistoryEntry(text);
 
     if (feelingNoteStatus) {
         feelingNoteStatus.textContent = "Saved!";
@@ -680,8 +689,67 @@ function saveFeelingNote() {
     }
 }
 
-// Only activate on feelings.html
 if (feelingNoteTextarea && saveFeelingNoteBtn) {
     loadFeelingNote();
     saveFeelingNoteBtn.addEventListener("click", saveFeelingNote);
+}
+
+// ---------- HISTORY PAGE RENDER ----------
+
+const historyListEl = document.getElementById("historyList");
+const clearHistoryBtn = document.getElementById("clearHistoryBtn");
+
+function renderHistory() {
+    if (!historyListEl) return;
+
+    let history = [];
+    try {
+        const raw = localStorage.getItem(FEELING_HISTORY_KEY);
+        history = raw ? JSON.parse(raw) : [];
+    } catch (e) {
+        history = [];
+    }
+
+    if (!history.length) {
+        historyListEl.innerHTML = '<p class="history-empty">No feelings saved yet. Go to the Feelings page and write your first one 💬</p>';
+        return;
+    }
+
+    history.sort((a, b) => {
+        const ta = new Date(a.timestamp).getTime();
+        const tb = new Date(b.timestamp).getTime();
+        return tb - ta;
+    });
+
+    const pieces = history.map(entry => {
+        const feelingLabel = entry.feelingName
+            ? `${entry.feelingName}${entry.feelingLang ? " · " + entry.feelingLang : ""}`
+            : "Feeling not selected";
+        const dateLabel = `${entry.dateLabel} · ${entry.timeLabel}`;
+
+        return `
+            <article class="history-item">
+                <header class="history-header">
+                    <span class="history-date">${dateLabel}</span>
+                    <span class="history-feeling">${feelingLabel}</span>
+                </header>
+                <p class="history-note">${entry.note || ""}</p>
+            </article>
+        `;
+    });
+
+    historyListEl.innerHTML = pieces.join("");
+}
+
+if (historyListEl) {
+    renderHistory();
+}
+
+if (clearHistoryBtn) {
+    clearHistoryBtn.addEventListener("click", () => {
+        const ok = confirm("Clear all saved feelings? This cannot be undone.");
+        if (!ok) return;
+        localStorage.removeItem(FEELING_HISTORY_KEY);
+        renderHistory();
+    });
 }
