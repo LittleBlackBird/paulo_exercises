@@ -125,8 +125,13 @@ body {
 }
 
 .theme-toggle input {
-    display: none;
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none; /* optional */
 }
+
 
 .toggle-track {
     position: relative;
