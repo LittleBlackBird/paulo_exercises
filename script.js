@@ -1,23 +1,24 @@
 // ---------- THEME TOGGLE (ALL PAGES) ----------
-const themeToggle = document.getElementById('themeToggle');
-
 (function initTheme() {
+    const themeToggle = document.getElementById('themeToggle');
+
     const saved =
         localStorage.getItem('theme') ||
-        document.body.getAttribute("data-theme") ||
+        document.body.getAttribute('data-theme') ||
         'dark';
 
     document.body.setAttribute('data-theme', saved);
 
-    if (themeToggle) {
-        themeToggle.checked = saved === 'dark';
+    if (!themeToggle) return;
 
-        themeToggle.addEventListener('change', (e) => {
-            const mode = e.target.checked ? 'dark' : 'light';
-            document.body.setAttribute('data-theme', mode);
-            localStorage.setItem('theme', mode);
-        });
-    }
+    // Checked = dark mode
+    themeToggle.checked = saved === 'dark';
+
+    themeToggle.addEventListener('change', (e) => {
+        const mode = e.target.checked ? 'dark' : 'light';
+        document.body.setAttribute('data-theme', mode);
+        localStorage.setItem('theme', mode);
+    });
 })();
 
 // ---------- QUIZ LOGIC (index.html) ----------
@@ -88,7 +89,7 @@ division_problems(int(${num}))
                 const userInput = li.querySelector(".answer-input").value;
                 const feedback = li.querySelector(".feedback");
 
-                if (parseInt(userInput) === answer) {
+                if (parseInt(userInput, 10) === answer) {
                     feedback.textContent = "✅ Correct!";
                     feedback.classList.remove('feedback-wrong');
                     feedback.classList.add('feedback-right');
