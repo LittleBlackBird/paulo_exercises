@@ -114,6 +114,8 @@ body {
     color: var(--color-accent);
 }
 
+/* THEME TOGGLE */
+
 .theme-toggle {
     display: inline-flex;
     align-items: center;
@@ -122,16 +124,16 @@ body {
     color: var(--color-muted);
     cursor: pointer;
     user-select: none;
+    position: relative;
 }
 
+/* Visually hidden but still interactive */
 .theme-toggle input {
     position: absolute;
     opacity: 0;
     width: 0;
     height: 0;
-    pointer-events: none; /* optional */
 }
-
 
 .toggle-track {
     position: relative;
@@ -171,6 +173,8 @@ body {
     background: radial-gradient(circle at 30% 30%, #38bdf8, #0ea5e9);
 }
 
+/* Light-mode visual for the toggle */
+
 body[data-theme="light"] .toggle-track {
     background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), rgba(148, 163, 184, 0.7));
     box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.6),
@@ -185,6 +189,8 @@ body[data-theme="light"] .toggle-thumb {
 body[data-theme="light"] .toggle-thumb::after {
     background: radial-gradient(circle at 30% 30%, #f97316, #b91c1c);
 }
+
+/* GLOBAL CARD / APP STYLES */
 
 .card {
     background: var(--color-bg-card);
@@ -687,6 +693,22 @@ body[data-theme="light"] .toggle-thumb::after {
     font-size: 0.9rem;
     color: var(--color-muted);
     font-style: italic;
+}
+
+/* LIGHT THEME OVERRIDES */
+
+body[data-theme="light"] {
+    --color-bg-card: #ffffff;
+    --color-text: #111827;
+    --color-muted: #4b5563;
+    --color-input-bg: #f9fafb;
+    --color-input-border: #d1d5db;
+    --color-border: rgba(148, 163, 184, 0.5);
+
+    color: var(--color-text);
+    background:
+        radial-gradient(circle at top left, #e5e7eb, transparent 55%),
+        radial-gradient(circle at bottom right, #f9fafb, #e5e7eb 65%);
 }
 
 /* RESPONSIVE */
