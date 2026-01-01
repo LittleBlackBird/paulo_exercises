@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercises for Paulo</title>
+
+    <!-- Pyodide for Python execution on the quiz page -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.22.1/full/pyodide.js"></script>
+
+    <!-- External CSS file -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-theme="dark">
+
+    <header class="app-header">
+        <div id="nav_bar"></div>
+        <div class="title-block">
+            <h1>Math Quiz</h1>
+            <p class="subtitle">Division challenges powered by Python in your browser.</p>
+        </div>
+
+    </header>
+
+    <div class="app">
+
+
+        <main class="card">
+            <label for="num_problems" class="question-label">
+                Paulo, how many problems do you want to solve?
+            </label>
+
+            <div class="controls-row">
+                <input type="number" id="num_problems" min="1" required>
+                <button id="generateBtn">Generate Problems</button>
+            </div>
+
+            <ol id="problems" class="problems-list"></ol>
+
+
+        </main>
+    </div>
+
+    <script async src="https://tenor.com/embed.js"></script>
+    <script src="js/load_nav.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
