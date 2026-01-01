@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feelings History - Paulo</title>
+
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body data-theme="dark">
+    <div class="app">
+        <header class="app-header">
+            <div id="nav_bar"></div>
+            <div class="title-block">
+                <h1>Feelings History</h1>
+                <p class="subtitle">See what you felt and wrote on different days.</p>
+            </div>
+
+
+        <main class="card">
+            <h2 class="feeling-title">Your saved feelings 📘</h2>
+            <p class="feeling-reflect-text" style="margin-bottom: 0.9rem;">
+                Each time you saved your answer on the Feelings page, it was stored here.
+            </p>
+
+            <div class="history-actions">
+                <button id="clearHistoryBtn" class="history-clear-btn">
+                    Clear all history
+                </button>
+            </div>
+
+            <section id="historyList" class="history-list">
+                <!-- Filled by script.js -->
+            </section>
+        </main>
+    </div>
+    <script src="js/load_nav.js" defer></script>
+    <script src="js/script.js" defer></script>
+    <script src="js/feelings.js" defer></script>
+</body>
+</html>

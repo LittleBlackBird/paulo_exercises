@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feeling of the Day - Paulo</title>
+
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body data-theme="dark">
+    <div class="app">
+        <header class="app-header">
+            <div id="nav_bar"></div>
+            <div class="title-block">
+                <h1>Feeling of the Day</h1>
+                <p class="subtitle">Learn one emotion at a time, in three languages.</p>
+            </div>
+
+        </header>
+
+        <main class="card">
+            <h2 class="feeling-title">Click to reveal today's feeling 👇</h2>
+
+            <button id="revealFeelingBtn" class="feeling-btn">
+                Reveal feeling of the day
+            </button>
+
+            <section id="feelingCard" class="feeling-card hidden">
+                <div class="feeling-header">
+                    <div class="feeling-emoji" id="feelingEmoji">😊</div>
+                    <div>
+                        <div class="feeling-name-row">
+                            <h3 class="feeling-name" id="feelingName">Happy</h3>
+                            <span class="feeling-lang" id="feelingLanguage">English</span>
+                        </div>
+                        <p class="feeling-definition" id="feelingDefinition">
+                            Feeling good inside, full of joy.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="feeling-story-block">
+                    <p class="feeling-story-label">Short story:</p>
+                    <p class="feeling-story" id="feelingStory">
+                        Paulo finished his drawing and his teacher smiled and showed it to the class.
+                        His chest felt light and warm. That feeling is “happy”.
+                    </p>
+                </div>
+            </section>
+
+            <section class="feeling-reflect">
+                <h3 class="feeling-reflect-title">What do YOU feel right now? Why?</h3>
+                <p class="feeling-reflect-text">
+                    Paulo, write a few words about how you feel now. You can be honest — this stays only on this computer.
+                </p>
+
+                <textarea id="feelingNote"
+                          class="feeling-note-input"
+                          rows="4"
+                          placeholder="Example: I feel excited because I will play soccer after homework."></textarea>
+
+                <div class="feeling-reflect-row">
+                    <button id="saveFeelingNoteBtn" class="feeling-note-btn">
+                        Save my answer
+                    </button>
+                    <span id="feelingNoteStatus" class="feeling-note-status"></span>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="js/load_nav.js" defer></script>
+    <script src="js/script.js" defer></script>
+    <script src="js/feelings.js" defer></script>
+</body>
+</html>
