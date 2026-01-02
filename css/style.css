@@ -11,6 +11,15 @@
     --bg-gradient-2: #020617;
 
     --color-bg-card: rgba(15, 23, 42, 0.92);
+
+    /* Surfaces used by dynamically-generated blocks (quiz items, checklist items, history items, pills) */
+    --color-surface: rgba(15, 23, 42, 0.95);
+    --color-surface-border: rgba(55, 65, 81, 0.9);
+    --color-pill-bg: rgba(15, 23, 42, 0.95);
+    --color-pill-border: rgba(148, 163, 184, 0.6);
+
+    /* Card shadow that adapts to theme */
+    --shadow-card: 0 16px 36px rgba(15, 23, 42, 0.16);
     --color-border: rgba(148, 163, 184, 0.35);
 
     --color-text: #e5e7eb;
@@ -306,8 +315,8 @@ body[data-theme="light"] .toggle-thumb::after {
 .problem-item {
     padding: 0.75rem 0.9rem;
     border-radius: 0.9rem;
-    background: rgba(15, 23, 42, 0.95);
-    border: 1px solid rgba(55, 65, 81, 0.9);
+    background: var(--color-surface);
+    border: 1px solid var(--color-surface-border);
     display: grid;
     grid-template-columns: minmax(0, 3fr) minmax(0, 2.4fr);
     gap: 0.75rem;
@@ -435,11 +444,11 @@ body[data-theme="light"] .toggle-thumb::after {
 .feeling-card {
     padding: 1.2rem 1rem 1.1rem;
     border-radius: 1.1rem;
-    border: 1px solid rgba(148, 163, 184, 0.6);
-    background: rgba(15, 23, 42, 0.96);
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-card);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    box-shadow: 0 16px 36px rgba(15, 23, 42, 0.16);
+    box-shadow: var(--shadow-card);
     animation: feeling-pop 0.25s ease-out;
 }
 
@@ -622,8 +631,8 @@ body[data-theme="light"] .toggle-thumb::after {
 .practice-checklist li {
     padding: 0.45rem 0.6rem;
     border-radius: 0.7rem;
-    background: rgba(15, 23, 42, 0.95);
-    border: 1px solid rgba(55, 65, 81, 0.9);
+    background: var(--color-surface);
+    border: 1px solid var(--color-surface-border);
 }
 
 .practice-checklist label {
@@ -675,8 +684,8 @@ body[data-theme="light"] .toggle-thumb::after {
 .history-item {
     padding: 0.8rem 0.9rem;
     border-radius: 0.9rem;
-    background: rgba(15, 23, 42, 0.96);
-    border: 1px solid rgba(55, 65, 81, 0.95);
+    background: var(--color-surface);
+    border: 1px solid var(--color-surface-border);
 }
 
 .history-header {
@@ -717,6 +726,12 @@ body[data-theme="light"] {
     --color-input-border: #d1d5db;
     --color-border: rgba(148, 163, 184, 0.5);
 
+    --color-surface: rgba(255, 255, 255, 0.92);
+    --color-surface-border: rgba(148, 163, 184, 0.45);
+    --color-pill-bg: rgba(255, 255, 255, 0.9);
+    --color-pill-border: rgba(148, 163, 184, 0.55);
+    --shadow-card: 0 16px 36px rgba(0, 0, 0, 0.10);
+
     color: var(--color-text);
     background:
         radial-gradient(circle at top left, #e5e7eb, transparent 55%),
@@ -740,4 +755,84 @@ body[data-theme="light"] {
     .problem-actions {
         justify-content: flex-start;
     }
+}
+
+
+/* AUDIO NARRATION CONTROLS (Feelings) */
+.narration-controls {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    margin-top: 0.9rem;
+    flex-wrap: wrap;
+}
+
+.narration-btn {
+    padding: 0.45rem 0.95rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform var(--transition-fast),
+                box-shadow var(--transition-fast),
+                background var(--transition-fast),
+                border-color var(--transition-fast);
+    user-select: none;
+}
+
+.narration-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 26px rgba(37, 99, 235, 0.18);
+    border-color: var(--color-accent-soft);
+}
+
+.narration-btn:active {
+    transform: translateY(1px) scale(0.98);
+}
+
+.narration-btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--color-accent-soft);
+}
+
+.narration-btn.narration-speak {
+    background: rgba(37, 99, 235, 0.12);
+    border-color: rgba(37, 99, 235, 0.35);
+    color: var(--color-accent);
+}
+
+body[data-theme="light"] .narration-btn.narration-speak {
+    background: rgba(37, 99, 235, 0.10);
+}
+
+.narration-btn.narration-stop {
+    background: rgba(239, 68, 68, 0.12);
+    border-color: rgba(239, 68, 68, 0.35);
+    color: #ef4444;
+}
+
+body[data-theme="light"] .narration-btn.narration-stop {
+    background: rgba(239, 68, 68, 0.10);
+}
+
+
+
+/* ======================================================
+   High-contrast language pill (LIGHT MODE)
+   ====================================================== */
+body[data-theme="light"] .feeling-lang,
+body[data-theme="light"] #feelingLanguage,
+body[data-theme="light"] .feeling-language {
+  background: rgba(37, 99, 235, 0.18);
+  border: 1px solid rgba(37, 99, 235, 0.45);
+  color: rgb(15, 23, 42);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.10);
+
+  padding: 0.28rem 0.65rem;
+  border-radius: 999px;
+  font-weight: 700;
+  letter-spacing: 0.25px;
 }
