@@ -836,3 +836,21 @@ body[data-theme="light"] .feeling-language {
   font-weight: 700;
   letter-spacing: 0.25px;
 }
+
+/* Improve contrast for "Clear all history" in LIGHT mode */
+body[data-theme="light"] .history-clear-btn {
+  background: rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(15, 23, 42, 0.35);
+  color: rgba(15, 23, 42, 0.95);
+}
+
+body[data-theme="light"] .history-clear-btn:hover {
+  background: rgba(15, 23, 42, 0.14);
+  border-color: rgba(15, 23, 42, 0.45);
+}
+
+body[data-theme="light"] .history-clear-btn:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.35);
+  outline-offset: 3px;
+}
+
