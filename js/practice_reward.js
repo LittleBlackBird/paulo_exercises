@@ -1,6 +1,5 @@
 // ===== Reward videos =====
 const rewardVideos = [
-  "assets/videos/Dragon1.mp4",
   "assets/videos/Dragon3.mp4",
   "assets/videos/Dragon4.mp4",
   "assets/videos/Dragon5.mp4",
