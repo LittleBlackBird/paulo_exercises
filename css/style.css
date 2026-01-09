@@ -889,3 +889,45 @@ body[data-theme="light"] .history-clear-btn:focus-visible {
   margin: 0.8rem 0 1rem;
 }
 
+/* REWARD MODAL – CLOSE BUTTON */
+
+.reward-close {
+  margin-top: 0.9rem;
+  align-self: center;
+
+  padding: 0.45rem 1.2rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+
+  background: var(--color-surface);
+  color: var(--color-text);
+
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.35);
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    background var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.reward-close:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.55);
+  border-color: var(--color-accent-soft);
+}
+
+.reward-close:active {
+  transform: translateY(1px) scale(0.97);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.45);
+}
+
+.reward-close:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-accent-soft);
+}
+
+
