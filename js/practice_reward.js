@@ -26,7 +26,6 @@ function checkReward() {
   modal.classList.add("is-open");
 
   video.load();
-  video.play().catch(() => {});
 }
 
 // Listen for checkbox changes
