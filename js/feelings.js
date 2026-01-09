@@ -605,17 +605,60 @@
     let currentFeeling = null;
 
 
-  // =========================================================
-  // SAVE BUTTON
-  // =========================================================
-  const feelingNoteTextarea = document.getElementById("feelingNote");
-  const saveFeelingNoteBtn = document.getElementById("saveFeelingNoteBtn");
-  const feelingNoteStatus = document.getElementById("feelingNoteStatus");
+// =========================================================
+// SAVE BUTTON + HISTORY STORAGE
+// =========================================================
+
+const FEELING_NOTE_KEY = "pauloFeelingNoteV1";
+const FEELING_HISTORY_KEY = "pauloFeelingHistoryV1";
+
+const feelingNoteTextarea = document.getElementById("feelingNote");
+const saveFeelingNoteBtn = document.getElementById("saveFeelingNoteBtn");
+const feelingNoteStatus = document.getElementById("feelingNoteStatus");
+
+function loadFeelingNote() {
+  if (!feelingNoteTextarea) return;
+  const saved = localStorage.getItem(FEELING_NOTE_KEY);
+  if (saved) feelingNoteTextarea.value = saved;
+}
+
+function appendFeelingHistoryEntry(noteText) {
+  if (!noteText) return;
+
+  let history = [];
+  try {
+    const raw = localStorage.getItem(FEELING_HISTORY_KEY);
+    history = raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    history = [];
+  }
+
+  const now = new Date();
+
+  history.push({
+    id: Date.now(),
+    timestamp: now.toISOString(),
+    dateLabel: now.toLocaleDateString(),
+    timeLabel: now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+    feelingId: currentFeeling ? currentFeeling.id : null,
+    feelingName: currentFeeling ? currentFeeling.name : null,
+    feelingLang: currentFeeling ? (currentFeeling.langLabel || currentFeeling.lang) : null,
+    note: noteText
+  });
+
+  localStorage.setItem(FEELING_HISTORY_KEY, JSON.stringify(history));
+}
 
 function saveFeelingNote() {
   if (!feelingNoteTextarea) return;
+
   const text = feelingNoteTextarea.value.trim();
-  localStorage.setItem("pauloFeelingNoteV1", text);
+
+  // Save latest note
+  localStorage.setItem(FEELING_NOTE_KEY, text);
+
+  // ALSO append to history (this is what the History page needs)
+  appendFeelingHistoryEntry(text);
 
   if (feelingNoteStatus) {
     feelingNoteStatus.textContent = "Saved!";
@@ -625,8 +668,66 @@ function saveFeelingNote() {
 }
 
 if (saveFeelingNoteBtn) {
+  loadFeelingNote();
   saveFeelingNoteBtn.addEventListener("click", saveFeelingNote);
 }
+
+// =========================================================
+// HISTORY PAGE RENDER
+// =========================================================
+
+const historyListEl = document.getElementById("historyList");
+const clearHistoryBtn = document.getElementById("clearHistoryBtn");
+
+function renderHistory() {
+  if (!historyListEl) return;
+
+  let history = [];
+  try {
+    const raw = localStorage.getItem(FEELING_HISTORY_KEY);
+    history = raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    history = [];
+  }
+
+  if (!history.length) {
+    historyListEl.innerHTML =
+      '<p class="history-empty">No feelings saved yet. Go to the Feelings page and write your first one 💬</p>';
+    return;
+  }
+
+  history.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+  historyListEl.innerHTML = history.map(entry => {
+    const feelingLabel = entry.feelingName
+      ? `${entry.feelingName}${entry.feelingLang ? " · " + entry.feelingLang : ""}`
+      : "Feeling not selected";
+
+    const dateLabel = `${entry.dateLabel} · ${entry.timeLabel}`;
+
+    return `
+      <article class="history-item">
+        <header class="history-header">
+          <span class="history-date">${dateLabel}</span>
+          <span class="history-feeling">${feelingLabel}</span>
+        </header>
+        <p class="history-note">${entry.note || ""}</p>
+      </article>
+    `;
+  }).join("");
+}
+
+if (historyListEl) renderHistory();
+
+if (clearHistoryBtn) {
+  clearHistoryBtn.addEventListener("click", () => {
+    const ok = confirm("Clear all saved feelings? This cannot be undone.");
+    if (!ok) return;
+    localStorage.removeItem(FEELING_HISTORY_KEY);
+    renderHistory();
+  });
+}
+
 
 
   // =========================================================
