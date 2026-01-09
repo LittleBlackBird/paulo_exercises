@@ -1,9 +1,11 @@
 // ===== Reward videos =====
 const rewardVideos = [
-  "assets/videos/Dragon3.mp4",
-  "assets/videos/Dragon4.mp4",
-  "assets/videos/Dragon5.mp4",
+  new URL("assets/videos/Dragon3.mp4", document.baseURI).href,
+  new URL("assets/videos/Dragon4.mp4", document.baseURI).href,
+  new URL("assets/videos/Dragon5.mp4", document.baseURI).href,
+  new URL("assets/videos/Dragon1.mp4", document.baseURI).href,
 ];
+
 
 // Pick random video
 function getRandomVideo() {
@@ -26,6 +28,7 @@ function checkReward() {
   modal.classList.add("is-open");
 
   video.load();
+
 }
 
 // Listen for checkbox changes
@@ -46,3 +49,5 @@ document.addEventListener("click", (e) => {
     modal.classList.remove("is-open");
   }
 });
+
+
