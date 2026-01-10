@@ -1,9 +1,9 @@
 // ===== Reward videos =====
 const rewardVideos = [
-  new URL("assets/videos/Dragon3.mp4", document.baseURI).href,
-  new URL("assets/videos/Dragon4.mp4", document.baseURI).href,
-  new URL("assets/videos/Dragon5.mp4", document.baseURI).href,
-  new URL("assets/videos/Dragon1.mp4", document.baseURI).href,
+  // new URL("assets/videos/Dragon3.mp4", document.baseURI).href,
+  // new URL("assets/videos/Dragon4.mp4", document.baseURI).href,
+  // new URL("assets/videos/Dragon5.mp4", document.baseURI).href,
+  // new URL("assets/videos/Dragon1.mp4", document.baseURI).href,
   new URL("assets/videos/Cereal1.mp4", document.baseURI).href,
 ];
 
