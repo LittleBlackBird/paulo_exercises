@@ -950,3 +950,13 @@ body[data-theme="light"] .history-clear-btn:focus-visible {
   transform: translateY(-2px);
 }
 
+    .page { max-width: 900px; margin: 0 auto; padding: 24px; }
+    .card { border: 1px solid rgba(0,0,0,.12); border-radius: 14px; padding: 16px; margin-top: 16px; }
+    .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+    .row > * { flex: 0 0 auto; }
+    button { padding: 10px 14px; border-radius: 10px; border: 1px solid rgba(0,0,0,.2); cursor: pointer; }
+    input, select { padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(0,0,0,.2); }
+    .muted { opacity: .75; }
+    .grid-notes { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
+    .grid-notes button { width: 100%; }
+    pre { white-space: pre-wrap; }
