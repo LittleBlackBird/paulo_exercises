@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Music Game</title>
+  <link rel="stylesheet" href="css/style.css">
+
+  <!--
+    Pyodide loads a Python runtime into the browser.
+    It defines a global function `loadPyodide()` which we call later in JS.
+  -->
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js"></script>
+</head>
+
+<body>
+  <header class="app-header">
+    <div id="nav_bar"></div>
+  </header>
+
+  <main class="page">
+    <h1>Music Game 🎵</h1>
+    <p class="muted">
+      Goal: hear the note and guess which of the 7 notes (C D E F G A B) is playing.
+      1 or 2 players.
+    </p>
+
+    <div class="card">
+      <div class="row">
+        <label>
+          Mode:
+          <select id="modeSelect">
+            <option value="1">1 Player</option>
+            <option value="2">2 Players</option>
+          </select>
+        </label>
+
+        <label>
+          Rounds:
+          <input id="roundsInput" type="number" min="1" max="50" value="10" />
+        </label>
+
+        <label>
+          Octave:
+          <select id="octaveSelect">
+            <option value="3">3 (lower)</option>
+            <option value="4" selected>4 (middle)</option>
+            <option value="5">5 (higher)</option>
+          </select>
+        </label>
+
+        <button id="startBtn">Start / Reset</button>
+        <button id="playBtn" disabled>Play Note</button>
+        <button id="testToneBtn">Test Tone (A4)</button>
+      </div>
+
+      <div class="grid-notes">
+        <button class="noteBtn" data-note="C" disabled>C</button>
+        <button class="noteBtn" data-note="D" disabled>D</button>
+        <button class="noteBtn" data-note="E" disabled>E</button>
+        <button class="noteBtn" data-note="F" disabled>F</button>
+        <button class="noteBtn" data-note="G" disabled>G</button>
+        <button class="noteBtn" data-note="A" disabled>A</button>
+        <button class="noteBtn" data-note="B" disabled>B</button>
+      </div>
+
+      <p id="status" class="muted" style="margin-top:12px;">Load Pyodide…</p>
+    </div>
+
+    <div class="card">
+      <h3>Score</h3>
+      <pre id="scoreBox">—</pre>
+    </div>
+  </main>
+
+  <script>
+    /**********************************************************************
+     * SECTION 1 — WEB AUDIO (JavaScript)
+     *
+     * We generate sound using the Web Audio API (Oscillator + Gain envelope).
+     *
+     * Key rule: Browsers usually require a user gesture to allow audio.
+     * That’s why we call `unlockAudio()` inside click handlers.
+     **********************************************************************/
+
+    // Frequencies for octave 4 (C4..B4). Other octaves are x2 or /2.
+    const NOTE_FREQS = {
+      "C": 261.6256, "D": 293.6648, "E": 329.6276, "F": 349.2282,
+      "G": 391.9954, "A": 440.0000, "B": 493.8833
+    };
+
+    let audioCtx = null;
+
+    function ensureAudio() {
+      // Create one AudioContext for the whole app
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      return audioCtx;
+    }
+
+    function freqForOctave(note, octave) {
+      // Base is octave 4. Every octave up doubles frequency.
+      const base = NOTE_FREQS[note];
+      const shift = octave - 4;
+      return base * Math.pow(2, shift);
+    }
+
+    async function unlockAudio() {
+      // Must be called from a user gesture (click) to reliably enable sound.
+      const ctx = ensureAudio();
+      if (ctx.state !== "running") await ctx.resume();
+    }
+
+    async function playTone(freq, seconds = 0.9) {
+      const ctx = ensureAudio();
+      if (ctx.state !== "running") await ctx.resume();
+
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq, ctx.currentTime);
+
+      // Envelope (avoid clicking sounds)
+      const now = ctx.currentTime;
+      const end = now + seconds;
+
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(0.25, now + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, end);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(end);
+    }
+
+    // Bridge function: Python picks the note; JS plays it.
+    window.js_play_note = async (note, octave) => {
+      const freq = freqForOctave(note, octave);
+      await playTone(freq, 0.9);
+    };
+
+    /**********************************************************************
+     * SECTION 2 — PYODIDE (Python in the browser)
+     *
+     * Important change (fix):
+     * Different Pyodide versions expose different JS conversion helpers.
+     * To avoid "toJs/to_js not a function" issues forever,
+     * we return JSON strings from Python and parse them in JS.
+     **********************************************************************/
+
+    let pyodide = null;
+
+    // Cache DOM elements
+    const statusEl = document.getElementById("status");
+    const scoreBox = document.getElementById("scoreBox");
+    const startBtn = document.getElementById("startBtn");
+    const playBtn = document.getElementById("playBtn");
+    const modeSelect = document.getElementById("modeSelect");
+    const roundsInput = document.getElementById("roundsInput");
+    const octaveSelect = document.getElementById("octaveSelect");
+    const noteButtons = Array.from(document.querySelectorAll(".noteBtn"));
+
+    function setButtonsEnabled(enabled) {
+      playBtn.disabled = !enabled;
+      noteButtons.forEach(b => b.disabled = !enabled);
+    }
+
+    async function initPyodide() {
+      statusEl.textContent = "Loading Pyodide runtime…";
+      pyodide = await loadPyodide();
+
+      statusEl.textContent = "Loading Python game…";
+
+      const pyCode = `
+import random, json
+
+NOTES = ["C","D","E","F","G","A","B"]
+
+class MusicGame:
+    def __init__(self):
+        self.reset(mode=1, rounds=10, octave=4)
+
+    def reset(self, mode=1, rounds=10, octave=4):
+        self.mode = int(mode)
+        self.rounds_total = int(rounds)
+        self.octave = int(octave)
+
+        self.round = 0
+        self.turn = 1
+        self.target = None
+        self.started = True
+
+        self.score = {1: 0, 2: 0}
+        self.history = []
+
+    def next_round(self):
+        if not self.started:
+            return json.dumps({"ok": False, "msg": "Start the game first."})
+
+        if self.round >= self.rounds_total:
+            return json.dumps({"ok": False, "msg": "Game finished."})
+
+        self.round += 1
+        self.turn = 1 if self.mode == 1 else (1 if self.round % 2 == 1 else 2)
+        self.target = random.choice(NOTES)
+
+        return json.dumps({
+            "ok": True,
+            "round": self.round,
+            "rounds_total": self.rounds_total,
+            "turn": self.turn,
+            "target": self.target,
+            "octave": self.octave
+        })
+
+    def guess(self, note):
+        if self.target is None:
+            return json.dumps({"ok": False, "msg": "Press 'Play Note' first."})
+
+        note = (note or "").strip().upper()
+        if note not in NOTES:
+            return json.dumps({"ok": False, "msg": "Invalid note."})
+
+        correct = (note == self.target)
+        if correct:
+            self.score[self.turn] += 1
+
+        self.history.append({
+            "round": self.round,
+            "player": self.turn,
+            "target": self.target,
+            "guess": note,
+            "correct": correct
+        })
+
+        self.target = None
+        finished = (self.round >= self.rounds_total)
+
+        return json.dumps({
+            "ok": True,
+            "correct": correct,
+            "player": self.turn,
+            "score": dict(self.score),
+            "round": self.round,
+            "rounds_total": self.rounds_total,
+            "finished": finished
+        })
+
+    def scoreboard_text(self):
+        if self.mode == 1:
+            return f"Player 1: {self.score[1]} / {self.rounds_total} correct"
+        else:
+            return (
+                f"Player 1: {self.score[1]}\\n"
+                f"Player 2: {self.score[2]}\\n"
+                f"Rounds: {self.round} / {self.rounds_total}\\n"
+                f"Turn alternates by round (odd=P1, even=P2)."
+            )
+
+game = MusicGame()
+      `;
+
+      await pyodide.runPythonAsync(pyCode);
+
+      statusEl.textContent = "Ready. Click Start / Reset.";
+      scoreBox.textContent = "—";
+    }
+
+    function pyGet(name) {
+      return pyodide.globals.get(name);
+    }
+
+    function updateScoreboard() {
+      const game = pyGet("game");
+      scoreBox.textContent = game.scoreboard_text();
+    }
+
+    async function startGame() {
+      if (!pyodide) {
+        statusEl.textContent = "Pyodide is still loading… wait a moment and try again.";
+        return;
+      }
+
+      const mode   = parseInt(modeSelect.value, 10);
+      const rounds = Math.max(1, Math.min(50, parseInt(roundsInput.value || "10", 10)));
+      const octave = parseInt(octaveSelect.value, 10);
+
+      const game = pyGet("game");
+      game.reset(mode, rounds, octave);
+
+      statusEl.textContent = "Game started. Click 'Play Note'.";
+      updateScoreboard();
+      setButtonsEnabled(true);
+    }
+
+    async function playNewRoundAndSound() {
+      try {
+        const game = pyGet("game");
+
+        const jsonStr = game.next_round();
+        const info = JSON.parse(jsonStr);
+
+        console.log("Round info from Python (parsed JSON):", info);
+
+        if (!info.ok) {
+          statusEl.textContent = info.msg || "Game finished.";
+          setButtonsEnabled(false);
+          return;
+        }
+
+        statusEl.textContent =
+          `Round ${info.round}/${info.rounds_total} — Player ${info.turn}: listen and guess.`;
+
+        await window.js_play_note(info.target, parseInt(octaveSelect.value, 10));
+      } catch (err) {
+        console.error("Play Note error:", err);
+        statusEl.textContent = `❌ Error (see console): ${err?.message || err}`;
+      }
+    }
+
+    async function makeGuess(note) {
+      try {
+        const game = pyGet("game");
+
+        const jsonStr = game.guess(note);
+        const res = JSON.parse(jsonStr);
+
+        console.log("Guess result from Python (parsed JSON):", res);
+
+        if (!res.ok) {
+          statusEl.textContent = res.msg || "Invalid action.";
+          return;
+        }
+
+        statusEl.textContent = res.correct
+          ? `✅ Correct! Player ${res.player} scores. Click 'Play Note' for next round.`
+          : `❌ Not this one. Click 'Play Note' for next round.`;
+
+        updateScoreboard();
+
+        if (res.finished) {
+          statusEl.textContent += " Game finished!";
+          setButtonsEnabled(false);
+        }
+      } catch (err) {
+        console.error("Guess error:", err);
+        statusEl.textContent = `❌ Error (see console): ${err?.message || err}`;
+      }
+    }
+
+    /**********************************************************************
+     * SECTION 3 — UI EVENT LISTENERS
+     **********************************************************************/
+
+    document.getElementById("testToneBtn").addEventListener("click", async () => {
+      await unlockAudio();
+      await playTone(440, 0.6);
+      console.log("Played A4 test tone");
+    });
+
+    startBtn.addEventListener("click", async () => {
+      await unlockAudio();
+      await startGame();
+    });
+
+    playBtn.addEventListener("click", async () => {
+      await unlockAudio();
+      await playNewRoundAndSound();
+    });
+
+    // ✅ CHANGED:
+    // When the user clicks a note button:
+    // 1) we play THAT note immediately (instant feedback)
+    // 2) then we submit it as a guess to Python (score right/wrong)
+    noteButtons.forEach(btn => {
+      btn.addEventListener("click", async () => {
+        await unlockAudio();
+
+        // Play the note the user clicked using the currently selected octave
+        const octave = parseInt(octaveSelect.value, 10);
+        await window.js_play_note(btn.dataset.note, octave);
+
+        // Now score the guess (right or wrong)
+        await makeGuess(btn.dataset.note);
+      });
+    });
+
+    setButtonsEnabled(false);
+    initPyodide();
+  </script>
+
+  <script>
+    const themeToggle = document.getElementById("themeToggle");
+    if (themeToggle) {
+      themeToggle.addEventListener("change", () => {
+        document.documentElement.classList.toggle("dark", themeToggle.checked);
+      });
+    }
+  </script>
+
+  <script src="js/load_nav.js"></script>
+</body>
+</html>
