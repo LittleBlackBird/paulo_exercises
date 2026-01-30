@@ -14,559 +14,559 @@
     // =========================================================
     
     // Base feelings with translations in EN, PT, ES
-    const feelingsBase = [
-{
-        id: "happy",
-        emoji: "😊",
-        translations: {
-          en: {
-            name: "Happy",
-            definition: "Feeling good inside, full of joy.",
-            story: "Paulo finished a drawing and a friend said it looked great. He noticed a tight knot, then a slower breath. He talked to someone he trusts and kept going. That feeling is happy.",
-          },
-          pt: {
-            name: "Feliz",
-            definition: "Sentir-se bem por dentro, cheio de alegria.",
-            story: "Paulo terminou um desenho e um amigo disse que ficou lindo. Sentiu o peito esquentar e os pensamentos acelerarem. Ele parou, deu nome ao sentimento e escolheu um próximo passo gentil. Esse sentimento é feliz.",
-          },
-          es: {
-            name: "Feliz",
-            definition: "Sentirse bien por dentro, lleno de alegría.",
-            story: "Paulo terminó un dibujo y un amigo dijo que quedó genial. Notó un nudo y luego una respiración más lenta. Se lo contó a alguien de confianza y siguió adelante. Ese sentimiento es feliz.",
-          },
-        },
+    const feelingsBase = 
+[
+  {
+    id: "happy",
+    emoji: "😊",
+    translations: {
+      en: {
+        name: "Happy",
+        definition: "Feeling good inside, full of joy.",
+        story: "Paulo finished a drawing after spending time focused and patient. When a friend looked at it and said it looked great, Paulo felt a small tight knot inside slowly loosen. His breathing became calmer, and he felt lighter. He shared the moment with someone he trusts and chose to keep going with confidence. That warm and good feeling inside is happy.",
       },
-
-{
-        id: "sad",
-        emoji: "😢",
-        translations: {
-          en: {
-            name: "Sad",
-            definition: "Feeling down, like you want to cry or be alone.",
-            story: "Paulo lost his favorite pencil and got very quiet in class. He felt his chest get warm and his thoughts speed up. He took a breath, asked for help, and tried again. That feeling is sad.",
-          },
-          pt: {
-            name: "Triste",
-            definition: "Sentir-se para baixo, com vontade de chorar ou ficar sozinho.",
-            story: "Paulo perdeu o lápis favorito e ficou bem quieto na aula. O rosto mudou e o corpo reagiu. Ele parou, deu nome ao sentimento e escolheu um próximo passo gentil. Esse sentimento é triste.",
-          },
-          es: {
-            name: "Triste",
-            definition: "Sentirse decaído, con ganas de llorar o estar solo.",
-            story: "Paulo perdió su lápiz favorito y se quedó muy callado en clase. Notó un nudo y luego una respiración más lenta. Respiró, pidió ayuda y lo intentó otra vez. Ese sentimiento es triste.",
-          },
-        },
+      pt: {
+        name: "Feliz",
+        definition: "Sentir-se bem por dentro, cheio de alegria.",
+        story: "Paulo terminou um desenho depois de se concentrar bastante. Quando um amigo disse que tinha ficado lindo, ele sentiu um aperto se transformar em um calor gostoso no peito. A respiração ficou mais tranquila. Ele reconheceu o sentimento, compartilhou com alguém de confiança e seguiu em frente com mais ânimo. Esse sentimento bom por dentro é feliz.",
       },
-
-{
-        id: "angry",
-        emoji: "😡",
-        translations: {
-          en: {
-            name: "Angry",
-            definition: "Feeling mad when something seems unfair or wrong.",
-            story: "Paulo saw someone cut in line and it felt unfair. His face changed and his body reacted. He paused, named the feeling, and chose a kind next step. That feeling is angry.",
-          },
-          pt: {
-            name: "Bravo",
-            definition: "Sentir raiva quando algo parece injusto ou errado.",
-            story: "Paulo viu alguém furar a fila e pareceu injusto. Percebeu um aperto e depois uma respiração mais calma. Ele falou com alguém de confiança e seguiu em frente. Esse sentimento é bravo.",
-          },
-          es: {
-            name: "Enojado",
-            definition: "Sentir rabia cuando algo parece injusto o incorrecto.",
-            story: "Paulo vio a alguien colarse en la fila y le pareció injusto. Notó un nudo y luego una respiración más lenta. Se detuvo, le puso nombre al sentimiento y eligió un siguiente paso amable. Ese sentimiento es enojado.",
-          },
-        },
+      es: {
+        name: "Feliz",
+        definition: "Sentirse bien por dentro, lleno de alegría.",
+        story: "Paulo terminó un dibujo después de concentrarse con cuidado. Cuando un amigo dijo que había quedado genial, sintió que un nudo se aflojaba poco a poco. Su respiración se volvió más tranquila. Compartió el momento con alguien de confianza y siguió adelante con alegría. Ese sentimiento agradable es feliz.",
       },
+    },
+  },
 
-{
-        id: "scared",
-        emoji: "😨",
-        translations: {
-          en: {
-            name: "Scared",
-            definition: "Feeling afraid something bad might happen.",
-            story: "Paulo heard thunder at night and held his blanket tighter. He noticed a tight knot, then a slower breath. He took a breath, asked for help, and tried again. That feeling is scared.",
-          },
-          pt: {
-            name: "Assustado",
-            definition: "Ter medo de que algo ruim possa acontecer.",
-            story: "Paulo ouviu trovões à noite e apertou o cobertor. O rosto mudou e o corpo reagiu. Ele falou com alguém de confiança e seguiu em frente. Esse sentimento é assustado.",
-          },
-          es: {
-            name: "Asustado",
-            definition: "Tener miedo de que algo malo pueda pasar.",
-            story: "Paulo oyó truenos de noche y apretó su manta. Sintió el pecho calentarse y los pensamientos acelerarse. Respiró, pidió ayuda y lo intentó otra vez. Ese sentimiento es asustado.",
-          },
-        },
+  {
+    id: "sad",
+    emoji: "😢",
+    translations: {
+      en: {
+        name: "Sad",
+        definition: "Feeling down, like you want to cry or be alone.",
+        story: "Paulo lost his favorite pencil and became very quiet in class. His body felt heavy, and his thoughts started moving fast. He took a slow breath and noticed the feeling instead of pushing it away. After asking for help, he tried again. That heavy and quiet feeling is sad.",
       },
-
-{
-        id: "love",
-        emoji: "❤️",
-        translations: {
-          en: {
-            name: "Love",
-            definition: "Caring a lot about someone or something.",
-            story: "Paulo helped his family and felt warm and safe inside. He noticed a tight knot, then a slower breath. He talked to someone he trusts and kept going. That feeling is love.",
-          },
-          pt: {
-            name: "Amor",
-            definition: "Cuidar muito de alguém ou de algo.",
-            story: "Paulo ajudou a família e sentiu um quentinho seguro por dentro. Sentiu o peito esquentar e os pensamentos acelerarem. Ele falou com alguém de confiança e seguiu em frente. Esse sentimento é amor.",
-          },
-          es: {
-            name: "Amor",
-            definition: "Querer mucho a alguien o algo.",
-            story: "Paulo ayudó a su familia y sintió un calorcito seguro por dentro. Sintió el pecho calentarse y los pensamientos acelerarse. Respiró, pidió ayuda y lo intentó otra vez. Ese sentimiento es amor.",
-          },
-        },
+      pt: {
+        name: "Triste",
+        definition: "Sentir-se para baixo, com vontade de chorar ou ficar sozinho.",
+        story: "Paulo perdeu o lápis favorito e ficou bem quieto na aula. O corpo ficou pesado e os pensamentos confusos. Ele parou por um instante, percebeu o sentimento e deu nome a ele. Depois, pediu ajuda e tentou continuar. Esse sentimento mais pesado é triste.",
       },
-
-{
-        id: "proud",
-        emoji: "😌",
-        translations: {
-          en: {
-            name: "Proud",
-            definition: "Feeling good about something you did well.",
-            story: "Paulo practiced reading and finished a whole page by himself. He noticed a tight knot, then a slower breath. He talked to someone he trusts and kept going. That feeling is proud.",
-          },
-          pt: {
-            name: "Orgulhoso",
-            definition: "Sentir-se bem por algo que você fez bem.",
-            story: "Paulo praticou leitura e terminou uma página sozinho. Percebeu um aperto e depois uma respiração mais calma. Ele respirou, pediu ajuda e tentou de novo. Esse sentimento é orgulhoso.",
-          },
-          es: {
-            name: "Orgulloso",
-            definition: "Sentirse bien por algo que hiciste bien.",
-            story: "Paulo practicó lectura y terminó una página él solo. Notó un nudo y luego una respiración más lenta. Respiró, pidió ayuda y lo intentó otra vez. Ese sentimiento es orgulloso.",
-          },
-        },
+      es: {
+        name: "Triste",
+        definition: "Sentirse decaído, con ganas de llorar o estar solo.",
+        story: "Paulo perdió su lápiz favorito y se quedó callado en clase. Su cuerpo se sintió pesado y la mente acelerada. Respiró despacio y reconoció lo que sentía. Luego pidió ayuda e intentó otra vez. Ese sentimiento es triste.",
       },
+    },
+  },
 
-{
-        id: "embarrassed",
-        emoji: "😳",
-        translations: {
-          en: {
-            name: "Embarrassed",
-            definition: "Feeling weird or shy when others are watching you.",
-            story: "Paulo spilled water at lunch and everyone looked for a second. His face changed and his body reacted. He took a breath, asked for help, and tried again. That feeling is embarrassed.",
-          },
-          pt: {
-            name: "Envergonhado",
-            definition: "Sentir-se estranho ou tímido quando os outros estão olhando.",
-            story: "Paulo derrubou água no lanche e todo mundo olhou por um segundo. O rosto mudou e o corpo reagiu. Ele falou com alguém de confiança e seguiu em frente. Esse sentimento é envergonhado.",
-          },
-          es: {
-            name: "Avergonzado",
-            definition: "Sentirse raro o tímido cuando los demás te miran.",
-            story: "Paulo derramó agua en el almuerzo y todos miraron un segundo. Notó un nudo y luego una respiración más lenta. Se detuvo, le puso nombre al sentimiento y eligió un siguiente paso amable. Ese sentimiento es avergonzado.",
-          },
-        },
+  {
+    id: "angry",
+    emoji: "😡",
+    translations: {
+      en: {
+        name: "Angry",
+        definition: "Feeling mad when something seems unfair or wrong.",
+        story: "Paulo saw someone cut in line, and it felt unfair. His body reacted right away, and his face became tense. He stopped for a moment to notice what was happening inside. After naming the feeling, he chose a calm and kind next step. That strong feeling is angry.",
       },
-
-{
-        id: "confused",
-        emoji: "😕",
-        translations: {
-          en: {
-            name: "Confused",
-            definition: "Not understanding what is happening or what to do.",
-            story: "Paulo heard new rules for a game and didn’t know what to do first. He noticed a tight knot, then a slower breath. He talked to someone he trusts and kept going. That feeling is confused.",
-          },
-          pt: {
-            name: "Confuso",
-            definition: "Não entender o que está acontecendo ou o que fazer.",
-            story: "Paulo ouviu regras novas de um jogo e não soube o que fazer primeiro. Sentiu o peito esquentar e os pensamentos acelerarem. Ele falou com alguém de confiança e seguiu em frente. Esse sentimento é confuso.",
-          },
-          es: {
-            name: "Confundido",
-            definition: "No entender qué está pasando o qué hacer.",
-            story: "Paulo escuchó reglas nuevas de un juego y no supo qué hacer primero. Su cara cambió y su cuerpo reaccionó. Se detuvo, le puso nombre al sentimiento y eligió un siguiente paso amable. Ese sentimiento es confundido.",
-          },
-        },
+      pt: {
+        name: "Bravo",
+        definition: "Sentir raiva quando algo parece injusto ou errado.",
+        story: "Paulo viu alguém furar a fila e achou injusto. O corpo reagiu rápido, com um aperto e tensão. Ele parou, respirou com mais calma e percebeu o que estava sentindo. Ao reconhecer o sentimento, escolheu um próximo passo mais gentil. Esse sentimento é bravo.",
       },
-
-{
-        id: "excited",
-        emoji: "🤩",
-        translations: {
-          en: {
-            name: "Excited",
-            definition: "Feeling super happy and full of energy about something.",
-            story: "Paulo packed his bag for a trip and couldn’t stop talking. He noticed a tight knot, then a slower breath. He paused, named the feeling, and chose a kind next step. That feeling is excited.",
-          },
-          pt: {
-            name: "Animado",
-            definition: "Sentir-se muito feliz e cheio de energia por algo.",
-            story: "Paulo arrumou a mochila para uma viagem e não parava de falar. O rosto mudou e o corpo reagiu. Ele respirou, pediu ajuda e tentou de novo. Esse sentimento é animado.",
-          },
-          es: {
-            name: "Emocionado",
-            definition: "Sentirse muy feliz y lleno de energía por algo.",
-            story: "Paulo preparó su mochila para un viaje y no paraba de hablar. Notó un nudo y luego una respiración más lenta. Respiró, pidió ayuda y lo intentó otra vez. Ese sentimiento es emocionado.",
-          },
-        },
+      es: {
+        name: "Enojado",
+        definition: "Sentir rabia cuando algo parece injusto o incorrecto.",
+        story: "Paulo vio a alguien colarse en la fila y le pareció injusto. Su cuerpo se tensó y su cara cambió. Se detuvo un momento para notar la emoción. Después de ponerle nombre, eligió un paso más amable. Ese sentimiento es enojado.",
       },
+    },
+  },
 
-{
-        id: "bored",
-        emoji: "🥱",
-        translations: {
-          en: {
-            name: "Bored",
-            definition: "Feeling like nothing is interesting right now.",
-            story: "Paulo waited while adults talked and time felt super slow. He felt his chest get warm and his thoughts speed up. He talked to someone he trusts and kept going. That feeling is bored.",
-          },
-          pt: {
-            name: "Entediado",
-            definition: "Sentir que nada está interessante naquele momento.",
-            story: "Paulo esperou enquanto adultos conversavam e o tempo demorava demais. Percebeu um aperto e depois uma respiração mais calma. Ele respirou, pediu ajuda e tentou de novo. Esse sentimento é entediado.",
-          },
-          es: {
-            name: "Aburrido",
-            definition: "Sentir que nada es interesante en ese momento.",
-            story: "Paulo esperó mientras los adultos hablaban y el tiempo iba lentísimo. Notó un nudo y luego una respiración más lenta. Respiró, pidió ayuda y lo intentó otra vez. Ese sentimiento es aburrido.",
-          },
-        },
+  {
+    id: "scared",
+    emoji: "😨",
+    translations: {
+      en: {
+        name: "Scared",
+        definition: "Feeling afraid something bad might happen.",
+        story: "Paulo heard loud thunder at night and pulled his blanket closer. His body felt tight, and his heart beat faster. After a slow breath, he noticed the fear was still there but smaller. He asked for comfort and stayed with the feeling. That feeling is scared.",
       },
-
-{
-        id: "surprised",
-        emoji: "😮",
-        translations: {
-          en: {
-            name: "Surprised",
-            definition: "Feeling shocked when something unexpected happens.",
-            story: "Paulo opened his lunchbox and found a little note inside. His face changed and his body reacted. He paused, named the feeling, and chose a kind next step. That feeling is surprised.",
-          },
-          pt: {
-            name: "Surpreso",
-            definition: "Ficar espantado quando algo inesperado acontece.",
-            story: "Paulo abriu a lancheira e encontrou um bilhetinho. Percebeu um aperto e depois uma respiração mais calma. Ele falou com alguém de confiança e seguiu em frente. Esse sentimento é surpreso.",
-          },
-          es: {
-            name: "Sorprendido",
-            definition: "Quedarse asombrado cuando pasa algo inesperado.",
-            story: "Paulo abrió su lonchera y encontró una notita. Su cara cambió y su cuerpo reaccionó. Se detuvo, le puso nombre al sentimiento y eligió un siguiente paso amable. Ese sentimiento es sorprendido.",
-          },
-        },
+      pt: {
+        name: "Assustado",
+        definition: "Ter medo de que algo ruim possa acontecer.",
+        story: "Paulo ouviu trovões à noite e apertou o cobertor. O corpo ficou tenso e o coração acelerado. Ele respirou devagar e percebeu o medo com mais clareza. Ao buscar apoio, conseguiu seguir em frente. Esse sentimento é assustado.",
       },
-
-{
-        id: "nervous",
-        emoji: "😬",
-        translations: {
-          en: {
-            name: "Nervous",
-            definition: "Feeling shaky or worried before something important.",
-            story: "Paulo had to present in class and felt butterflies in his stomach. He felt his chest get warm and his thoughts speed up. He paused, named the feeling, and chose a kind next step. That feeling is nervous.",
-          },
-          pt: {
-            name: "Nervoso",
-            definition: "Sentir-se tremendo ou preocupado antes de algo importante.",
-            story: "Paulo precisou apresentar na aula e sentiu frio na barriga. Percebeu um aperto e depois uma respiração mais calma. Ele respirou, pediu ajuda e tentou de novo. Esse sentimento é nervoso.",
-          },
-          es: {
-            name: "Nervioso",
-            definition: "Sentirse tembloroso o preocupado antes de algo importante.",
-            story: "Paulo tuvo que presentar en clase y sintió mariposas en el estómago. Notó un nudo y luego una respiración más lenta. Se detuvo, le puso nombre al sentimiento y eligió un siguiente paso amable. Ese sentimiento es nervioso.",
-          },
-        },
+      es: {
+        name: "Asustado",
+        definition: "Tener miedo de que algo malo pueda pasar.",
+        story: "Paulo oyó truenos de noche y apretó su manta. El cuerpo se tensó y los pensamientos corrieron rápido. Respiró con calma y notó el miedo con más claridad. Pidió ayuda y se tranquilizó poco a poco. Ese sentimiento es asustado.",
       },
+    },
+  },
 
-{
-        id: "calm",
-        emoji: "😌",
-        translations: {
-          en: {
-            name: "Calm",
-            definition: "Feeling peaceful and relaxed.",
-            story: "Paulo sat quietly after reading and noticed his breathing slow down. He felt his chest get warm and his thoughts speed up. He talked to someone he trusts and kept going. That feeling is calm.",
-          },
-          pt: {
-            name: "Calmo",
-            definition: "Sentir-se em paz e relaxado.",
-            story: "Paulo ficou quietinho depois de ler e percebeu a respiração desacelerar. Sentiu o peito esquentar e os pensamentos acelerarem. Ele falou com alguém de confiança e seguiu em frente. Esse sentimento é calmo.",
-          },
-          es: {
-            name: "Calmado",
-            definition: "Sentirse en paz y relajado.",
-            story: "Paulo se quedó tranquilo después de leer y notó la respiración lenta. Sintió el pecho calentarse y los pensamientos acelerarse. Se detuvo, le puso nombre al sentimiento y eligió un siguiente paso amable. Ese sentimiento es calmado.",
-          },
-        },
+  {
+    id: "love",
+    emoji: "❤️",
+    translations: {
+      en: {
+        name: "Love",
+        definition: "Caring a lot about someone or something.",
+        story: "Paulo helped his family with care and attention. Inside, he felt warm, safe, and connected. His breathing slowed as he noticed the comfort of the moment. He shared the feeling and stayed close. That caring and gentle feeling is love.",
       },
-
-{
-        id: "disappointed",
-        emoji: "😞",
-        translations: {
-          en: {
-            name: "Disappointed",
-            definition:
-              "Feeling sad because something didn’t happen the way you hoped.",
-            story: "Paulo planned to play outside, but rain started right away. He noticed a tight knot, then a slower breath. He took a breath, asked for help, and tried again. That feeling is disappointed.",
-          },
-          pt: {
-            name: "Decepcionado",
-            definition:
-              "Sentir-se triste porque algo não aconteceu como você queria.",
-            story: "Paulo planejou brincar lá fora, mas começou a chover. Percebeu um aperto e depois uma respiração mais calma. Ele parou, deu nome ao sentimento e escolheu um próximo passo gentil. Esse sentimento é decepcionado.",
-          },
-          es: {
-            name: "Decepcionado",
-            definition: "Sentirse triste porque algo no salió como querías.",
-            story: "Paulo planeó jugar afuera, pero empezó a llover. Notó un nudo y luego una respiración más lenta. Respiró, pidió ayuda y lo intentó otra vez. Ese sentimiento es decepcionado.",
-          },
-        },
+      pt: {
+        name: "Amor",
+        definition: "Cuidar muito de alguém ou de algo.",
+        story: "Paulo ajudou a família com atenção e carinho. Por dentro, sentiu um calor seguro e acolhedor. A respiração ficou mais tranquila enquanto ele percebia a conexão. Ele compartilhou o momento e permaneceu presente. Esse sentimento é amor.",
       },
-
-{
-        id: "curious",
-        emoji: "🤔",
-        translations: {
-          en: {
-            name: "Curious",
-            definition: "Wanting to know or learn more about something.",
-            story: "Paulo saw a tiny bug and leaned closer to watch it move. His face changed and his body reacted. He paused, named the feeling, and chose a kind next step. That feeling is curious.",
-          },
-          pt: {
-            name: "Curioso",
-            definition: "Querer saber ou aprender mais sobre algo.",
-            story: "Paulo viu um insetinho e chegou mais perto para ver como ele se mexia. Percebeu um aperto e depois uma respiração mais calma. Ele respirou, pediu ajuda e tentou de novo. Esse sentimento é curioso.",
-          },
-          es: {
-            name: "Curioso",
-            definition: "Querer saber o aprender más sobre algo.",
-            story: "Paulo vio un bichito y se acercó para ver cómo se movía. Notó un nudo y luego una respiración más lenta. Respiró, pidió ayuda y lo intentó otra vez. Ese sentimiento es curioso.",
-          },
-        },
+      es: {
+        name: "Amor",
+        definition: "Querer mucho a alguien o algo.",
+        story: "Paulo ayudó a su familia con cuidado y atención. Por dentro, sintió un calor seguro y tranquilo. Su respiración se volvió lenta mientras notaba la conexión. Compartió ese momento especial. Ese sentimiento es amor.",
       },
+    },
+  },
 
-{
-        id: "jealous",
-        emoji: "😒",
-        translations: {
-          en: {
-            name: "Jealous",
-            definition: "Wanting what someone else has.",
-            story: "Paulo saw a friend’s new toy and wished he had one too. He felt his chest get warm and his thoughts speed up. He paused, named the feeling, and chose a kind next step. That feeling is jealous.",
-          },
-          pt: {
-            name: "Com ciúmes",
-            definition: "Querer ter o que outra pessoa tem.",
-            story: "Paulo viu o brinquedo novo do amigo e quis ter um igual. Sentiu o peito esquentar e os pensamentos acelerarem. Ele falou com alguém de confiança e seguiu em frente. Esse sentimento é com ciúmes.",
-          },
-          es: {
-            name: "Celoso",
-            definition: "Querer lo que otra persona tiene.",
-            story: "Paulo vio el juguete nuevo de un amigo y quiso uno igual. Sintió el pecho calentarse y los pensamientos acelerarse. Se lo contó a alguien de confianza y siguió adelante. Ese sentimiento es celoso.",
-          },
-        },
+  {
+    id: "proud",
+    emoji: "😌",
+    translations: {
+      en: {
+        name: "Proud",
+        definition: "Feeling good about something you did well.",
+        story: "Paulo practiced reading and finished a full page by himself. At first, his body felt tight, then relaxed. He noticed the effort he had made and felt satisfied. Sharing the moment made him want to keep learning. That feeling is proud.",
       },
-
-{
-        id: "lonely",
-        emoji: "😔",
-        translations: {
-          en: {
-            name: "Lonely",
-            definition: "Feeling alone and wishing for company.",
-            story: "Paulo looked for someone to play with and the yard felt too quiet. He felt his chest get warm and his thoughts speed up. He talked to someone he trusts and kept going. That feeling is lonely.",
-          },
-          pt: {
-            name: "Sozinho",
-            definition: "Sentir-se só e com vontade de ter companhia.",
-            story: "Paulo procurou alguém para brincar e o quintal ficou silencioso demais. Percebeu um aperto e depois uma respiração mais calma. Ele falou com alguém de confiança e seguiu em frente. Esse sentimento é sozinho.",
-          },
-          es: {
-            name: "Solo",
-            definition: "Sentirse solo y con ganas de tener compañía.",
-            story: "Paulo buscó con quién jugar y el patio se sintió demasiado silencioso. Notó un nudo y luego una respiración más lenta. Se lo contó a alguien de confianza y siguió adelante. Ese sentimiento es solo.",
-          },
-        },
+      pt: {
+        name: "Orgulhoso",
+        definition: "Sentir-se bem por algo que você fez bem.",
+        story: "Paulo praticou leitura e conseguiu terminar uma página sozinho. O corpo relaxou depois do esforço. Ele percebeu o quanto tinha se dedicado e se sentiu satisfeito. Ao compartilhar, ganhou vontade de continuar. Esse sentimento é orgulho.",
       },
-
-{
-        id: "grateful",
-        emoji: "🙏",
-        translations: {
-          en: {
-            name: "Grateful",
-            definition: "Feeling thankful for something good.",
-            story: "Paulo a classmate shared snacks with him and smiled. His face changed and his body reacted. He talked to someone he trusts and kept going. That feeling is grateful.",
-          },
-          pt: {
-            name: "Grato",
-            definition: "Sentir-se agradecido por algo bom.",
-            story: "Paulo um colega dividiu o lanche com ele e sorriu. Sentiu o peito esquentar e os pensamentos acelerarem. Ele falou com alguém de confiança e seguiu em frente. Esse sentimento é grato.",
-          },
-          es: {
-            name: "Agradecido",
-            definition: "Sentirse agradecido por algo bueno.",
-            story: "Paulo un compañero compartió su merienda con él y sonrió. Notó un nudo y luego una respiración más lenta. Respiró, pidió ayuda y lo intentó otra vez. Ese sentimiento es agradecido.",
-          },
-        },
+      es: {
+        name: "Orgulloso",
+        definition: "Sentirse bien por algo que hiciste bien.",
+        story: "Paulo practicó lectura y terminó una página solo. El cuerpo se relajó después del esfuerzo. Reconoció su dedicación y se sintió satisfecho. Al compartirlo, quiso seguir aprendiendo. Ese sentimiento es orgullo.",
       },
+    },
+  },
 
-{
-        id: "guilty",
-        emoji: "😟",
-        translations: {
-          en: {
-            name: "Guilty",
-            definition: "Feeling bad about something you did wrong.",
-            story: "Paulo broke a small rule and kept thinking about it afterward. He felt his chest get warm and his thoughts speed up. He paused, named the feeling, and chose a kind next step. That feeling is guilty.",
-          },
-          pt: {
-            name: "Culpado",
-            definition: "Sentir-se mal por algo errado que você fez.",
-            story: "Paulo quebrou uma regrinha e ficou pensando nisso depois. Percebeu um aperto e depois uma respiração mais calma. Ele parou, deu nome ao sentimento e escolheu um próximo passo gentil. Esse sentimento é culpado.",
-          },
-          es: {
-            name: "Culpable",
-            definition: "Sentirse mal por algo malo que hiciste.",
-            story: "Paulo rompió una regla pequeña y se quedó pensándolo después. Notó un nudo y luego una respiración más lenta. Respiró, pidió ayuda y lo intentó otra vez. Ese sentimiento es culpable.",
-          },
-        },
+  {
+    id: "embarrassed",
+    emoji: "😳",
+    translations: {
+      en: {
+        name: "Embarrassed",
+        definition: "Feeling weird or shy when others are watching you.",
+        story: "Paulo spilled water at lunch, and people looked for a moment. His face felt warm, and his body tensed up. He paused and noticed the feeling instead of hiding. After getting help, the moment passed. That feeling is embarrassed.",
       },
-
-{
-        id: "tired",
-        emoji: "😴",
-        translations: {
-          en: {
-            name: "Tired",
-            definition: "Feeling low on energy and needing rest.",
-            story: "Paulo played hard at recess and later his eyes felt heavy. He felt his chest get warm and his thoughts speed up. He talked to someone he trusts and kept going. That feeling is tired.",
-          },
-          pt: {
-            name: "Cansado",
-            definition: "Sentir pouca energia e precisar descansar.",
-            story: "Paulo brincou muito no recreio e depois ficou com os olhos pesados. Sentiu o peito esquentar e os pensamentos acelerarem. Ele parou, deu nome ao sentimento e escolheu um próximo passo gentil. Esse sentimento é cansado.",
-          },
-          es: {
-            name: "Cansado",
-            definition: "Tener poca energía y necesitar descansar.",
-            story: "Paulo jugó mucho en el recreo y luego sintió los ojos pesados. Sintió el pecho calentarse y los pensamientos acelerarse. Se lo contó a alguien de confianza y siguió adelante. Ese sentimiento es cansado.",
-          },
-        },
+      pt: {
+        name: "Envergonhado",
+        definition: "Sentir-se estranho ou tímido quando os outros estão olhando.",
+        story: "Paulo derrubou água no lanche e algumas pessoas olharam. O rosto esquentou e o corpo ficou tenso. Ele parou, percebeu o sentimento e respirou. Com ajuda, tudo se acalmou. Esse sentimento é envergonhado.",
       },
-
-{
-          id: "hopeful",
-          emoji: "🌈",
-          translations: {
-              en: {
-                  name: "Hopeful",
-                  definition: "Believing something good will happen.",
-                  story: "Paulo had a rough moment, but believed tomorrow could be better. He felt his chest get warm and his thoughts speed up. He talked to someone he trusts and kept going. That feeling is hopeful."
-              },
-              pt: {
-                  name: "Esperançoso",
-                  definition: "Acreditar que algo bom vai acontecer.",
-                  story: "Paulo teve um momento difícil, mas acreditou que amanhã pode ser melhor. Sentiu o peito esquentar e os pensamentos acelerarem. Ele parou, deu nome ao sentimento e escolheu um próximo passo gentil. Esse sentimento é esperançoso."
-              },
-              es: {
-                  name: "Esperanzado",
-                  definition: "Creer que algo bueno va a pasar.",
-                  story: "Paulo tuvo un momento difícil, pero creyó que mañana puede mejorar. Su cara cambió y su cuerpo reaccionó. Se lo contó a alguien de confianza y siguió adelante. Ese sentimiento es esperanzado."
-              }
-          }
+      es: {
+        name: "Avergonzado",
+        definition: "Sentirse raro o tímido cuando los demás te miran.",
+        story: "Paulo derramó agua en el almuerzo y todos miraron un momento. Su cara se calentó y el cuerpo se tensó. Se detuvo y reconoció lo que sentía. Con ayuda, la situación pasó. Ese sentimiento es avergonzado.",
       },
+    },
+  },
 
-{
-          id: "relieved",
-          emoji: "😮‍💨",
-          translations: {
-              en: {
-                  name: "Relieved",
-                  definition: "Feeling better after worry is gone.",
-                  story: "Paulo worried he lost something, then found it in his backpack. He noticed a tight knot, then a slower breath. He talked to someone he trusts and kept going. That feeling is relieved."
-              },
-              pt: {
-                  name: "Aliviado",
-                  definition: "Sentir-se melhor depois que a preocupação passa.",
-                  story: "Paulo achou que tinha perdido algo e depois encontrou na mochila. O rosto mudou e o corpo reagiu. Ele falou com alguém de confiança e seguiu em frente. Esse sentimento é aliviado."
-              },
-              es: {
-                  name: "Aliviado",
-                  definition: "Sentirse mejor después de que pasa la preocupación.",
-                  story: "Paulo se preocupó por perder algo y luego lo encontró en su mochila. Su cara cambió y su cuerpo reaccionó. Respiró, pidió ayuda y lo intentó otra vez. Ese sentimiento es aliviado."
-              }
-          }
+  {
+    id: "confused",
+    emoji: "😕",
+    translations: {
+      en: {
+        name: "Confused",
+        definition: "Not understanding what is happening or what to do.",
+        story: "Paulo heard new rules for a game and didn’t know what to do first. His thoughts felt messy, and his body paused. He took a breath and noticed the confusion. After asking questions, things became clearer. That feeling is confused.",
       },
-
-{
-          id: "frustrated",
-          emoji: "😤",
-          translations: {
-              en: {
-                  name: "Frustrated",
-                  definition: "Feeling upset when things don’t work the way you want.",
-                  story: "Paulo tried to tie his shoelaces, but the knot kept slipping. He noticed a tight knot, then a slower breath. He took a breath, asked for help, and tried again. That feeling is frustrated."
-              },
-              pt: {
-                  name: "Frustrado",
-                  definition: "Sentir-se chateado quando as coisas não dão certo.",
-                  story: "Paulo tentou amarrar o tênis, mas o laço soltava. Percebeu um aperto e depois uma respiração mais calma. Ele respirou, pediu ajuda e tentou de novo. Esse sentimento é frustrado."
-              },
-              es: {
-                  name: "Frustrado",
-                  definition: "Sentirse molesto cuando las cosas no salen como quieres.",
-                  story: "Paulo intentó atarse los cordones, pero el nudo se soltaba. Su cara cambió y su cuerpo reaccionó. Se detuvo, le puso nombre al sentimiento y eligió un siguiente paso amable. Ese sentimiento es frustrado."
-              }
-          }
+      pt: {
+        name: "Confuso",
+        definition: "Não entender o que está acontecendo ou o que fazer.",
+        story: "Paulo ouviu regras novas de um jogo e ficou sem saber o que fazer. Os pensamentos ficaram bagunçados. Ele respirou, percebeu a confusão e pediu ajuda. Aos poucos, tudo fez mais sentido. Esse sentimento é confuso.",
       },
-
-{
-          id: "safe",
-          emoji: "🛡️",
-          translations: {
-              en: {
-                  name: "Safe",
-                  definition: "Feeling protected and secure.",
-                  story: "Paulo walked with a trusted adult and felt protected. His face changed and his body reacted. He took a breath, asked for help, and tried again. That feeling is safe."
-              },
-              pt: {
-                  name: "Seguro",
-                  definition: "Sentir-se protegido e tranquilo.",
-                  story: "Paulo caminhou com um adulto de confiança e se sentiu protegido. O rosto mudou e o corpo reagiu. Ele respirou, pediu ajuda e tentou de novo. Esse sentimento é seguro."
-              },
-              es: {
-                  name: "Seguro",
-                  definition: "Sentirse protegido y tranquilo.",
-                  story: "Paulo caminó con un adulto de confianza y se sintió protegido. Sintió el pecho calentarse y los pensamientos acelerarse. Se lo contó a alguien de confianza y siguió adelante. Ese sentimiento es seguro."
-              }
-          }
+      es: {
+        name: "Confundido",
+        definition: "No entender qué está pasando o qué hacer.",
+        story: "Paulo escuchó reglas nuevas de un juego y no supo qué hacer. La mente se sintió desordenada. Respiró y reconoció la confusión. Al hacer preguntas, entendió mejor. Ese sentimiento es confundido.",
       },
+    },
+  },
 
-{
-          id: "confident",
-          emoji: "💪",
-          translations: {
-              en: {
-                  name: "Confident",
-                  definition: "Believing in yourself and what you can do.",
-                  story: "Paulo answered a question in class and spoke clearly. His face changed and his body reacted. He paused, named the feeling, and chose a kind next step. That feeling is confident."
-              },
-              pt: {
-                  name: "Confiante",
-                  definition: "Acreditar em si mesmo e no que você consegue fazer.",
-                  story: "Paulo respondeu uma pergunta na aula e falou com clareza. O rosto mudou e o corpo reagiu. Ele respirou, pediu ajuda e tentou de novo. Esse sentimento é confiante."
-              },
-              es: {
-                  name: "Confiado",
-                  definition: "Creer en ti mismo y en lo que puedes hacer.",
-                  story: "Paulo respondió una pregunta en clase y habló con claridad. Notó un nudo y luego una respiración más lenta. Se detuvo, le puso nombre al sentimiento y eligió un siguiente paso amable. Ese sentimiento es confiado."
-              }
-          }
-      }
+  {
+    id: "excited",
+    emoji: "🤩",
+    translations: {
+      en: {
+        name: "Excited",
+        definition: "Feeling super happy and full of energy about something.",
+        story: "Paulo packed his bag for a trip and couldn’t stop talking. His body felt buzzy and full of energy. He paused to take a breath and noticed how strong the feeling was. Smiling, he stayed with it. That feeling is excited.",
+      },
+      pt: {
+        name: "Animado",
+        definition: "Sentir-se muito feliz e cheio de energia por algo.",
+        story: "Paulo arrumou a mochila para uma viagem e não parava de falar. O corpo estava cheio de energia e movimento. Ele respirou e percebeu a intensidade do sentimento. Com um sorriso, seguiu animado. Esse sentimento é animação.",
+      },
+      es: {
+        name: "Emocionado",
+        definition: "Sentirse muy feliz y lleno de energía por algo.",
+        story: "Paulo preparó su mochila para un viaje y hablaba sin parar. El cuerpo estaba lleno de energía. Respiró y notó lo fuerte que era el sentimiento. Sonriendo, lo disfrutó. Ese sentimiento es emoción.",
+      },
+    },
+  },
+
+  {
+    id: "bored",
+    emoji: "🥱",
+    translations: {
+      en: {
+        name: "Bored",
+        definition: "Feeling like nothing is interesting right now.",
+        story: "Paulo waited while adults talked, and time felt very slow. His body felt heavy, and his mind wandered. He noticed the lack of interest and sighed. After checking in with someone, he found a way to pass the time. That feeling is bored.",
+      },
+      pt: {
+        name: "Entediado",
+        definition: "Sentir que nada está interessante naquele momento.",
+        story: "Paulo esperou enquanto os adultos conversavam e o tempo parecia não passar. O corpo ficou pesado e a atenção distante. Ele percebeu o tédio e suspirou. Com ajuda, encontrou algo para fazer. Esse sentimento é entediado.",
+      },
+      es: {
+        name: "Aburrido",
+        definition: "Sentir que nada es interesante en ese momento.",
+        story: "Paulo esperó mientras los adultos hablaban y el tiempo iba lento. El cuerpo se sentía pesado y la mente distraída. Reconoció el aburrimiento. Luego encontró algo para entretenerse. Ese sentimiento es aburrido.",
+      },
+    },
+  },
+
+  {
+    id: "surprised",
+    emoji: "😮",
+    translations: {
+      en: {
+        name: "Surprised",
+        definition: "Feeling shocked when something unexpected happens.",
+        story: "Paulo opened his lunchbox and found a small note inside. His eyes widened, and his body reacted quickly. He paused to understand what he saw. Smiling, he enjoyed the unexpected moment. That feeling is surprised.",
+      },
+      pt: {
+        name: "Surpreso",
+        definition: "Ficar espantado quando algo inesperado acontece.",
+        story: "Paulo abriu a lancheira e encontrou um bilhetinho. O corpo reagiu na hora, com olhos arregalados. Ele parou para entender o que estava vendo. Com um sorriso, aproveitou a surpresa. Esse sentimento é surpresa.",
+      },
+      es: {
+        name: "Sorprendido",
+        definition: "Quedarse asombrado cuando pasa algo inesperado.",
+        story: "Paulo abrió su lonchera y encontró una notita. El cuerpo reaccionó de inmediato. Se detuvo para comprender lo inesperado. Luego sonrió y disfrutó el momento. Ese sentimiento es sorpresa.",
+      },
+    },
+  },
+
+  {
+    id: "nervous",
+    emoji: "😬",
+    translations: {
+      en: {
+        name: "Nervous",
+        definition: "Feeling shaky or worried before something important.",
+        story: "Paulo had to present in class and felt butterflies in his stomach. His heart beat faster, and his hands felt shaky. He paused and took a deep breath. After naming the feeling, he spoke anyway. That feeling is nervous.",
+      },
+      pt: {
+        name: "Nervoso",
+        definition: "Sentir-se tremendo ou preocupado antes de algo importante.",
+        story: "Paulo precisava apresentar na aula e sentiu frio na barriga. O coração acelerou e as mãos tremeram. Ele respirou fundo e percebeu o nervosismo. Mesmo assim, seguiu em frente. Esse sentimento é nervoso.",
+      },
+      es: {
+        name: "Nervioso",
+        definition: "Sentirse tembloroso o preocupado antes de algo importante.",
+        story: "Paulo tuvo que presentar en clase y sintió mariposas en el estómago. El corazón latía rápido. Respiró hondo y reconoció el nerviosismo. Luego habló. Ese sentimiento es nervioso.",
+      },
+    },
+  },
+
+  {
+    id: "calm",
+    emoji: "😌",
+    translations: {
+      en: {
+        name: "Calm",
+        definition: "Feeling peaceful and relaxed.",
+        story: "Paulo sat quietly after reading and noticed his breathing slow down. His body felt soft and relaxed. Thoughts moved gently instead of rushing. He stayed in that peaceful moment. That feeling is calm.",
+      },
+      pt: {
+        name: "Calmo",
+        definition: "Sentir-se em paz e relaxado.",
+        story: "Paulo ficou quietinho depois de ler e percebeu a respiração mais lenta. O corpo estava solto e tranquilo. Os pensamentos vinham devagar. Ele permaneceu nesse estado de paz. Esse sentimento é calmo.",
+      },
+      es: {
+        name: "Calmado",
+        definition: "Sentirse en paz y relajado.",
+        story: "Paulo se quedó tranquilo después de leer y notó la respiración lenta. El cuerpo se sentía relajado. Los pensamientos pasaban despacio. Disfrutó ese momento de paz. Ese sentimiento es calma.",
+      },
+    },
+  },
+
+  {
+    id: "disappointed",
+    emoji: "😞",
+    translations: {
+      en: {
+        name: "Disappointed",
+        definition: "Feeling sad because something didn’t happen the way you hoped.",
+        story: "Paulo planned to play outside, but rain started right away. His shoulders dropped, and his mood changed. He noticed the sadness and took a breath. After adjusting his plans, he moved on. That feeling is disappointed.",
+      },
+      pt: {
+        name: "Decepcionado",
+        definition: "Sentir-se triste porque algo não aconteceu como você queria.",
+        story: "Paulo planejou brincar lá fora, mas começou a chover. O corpo desanimou e o humor mudou. Ele percebeu a decepção e respirou. Ao mudar os planos, seguiu em frente. Esse sentimento é decepção.",
+      },
+      es: {
+        name: "Decepcionado",
+        definition: "Sentirse triste porque algo no salió como querías.",
+        story: "Paulo planeó jugar afuera, pero empezó a llover. El ánimo bajó de inmediato. Reconoció la decepción y respiró. Luego ajustó sus planes. Ese sentimiento es decepción.",
+      },
+    },
+  },
+
+  {
+    id: "curious",
+    emoji: "🤔",
+    translations: {
+      en: {
+        name: "Curious",
+        definition: "Wanting to know or learn more about something.",
+        story: "Paulo saw a tiny bug and leaned closer to watch it move. His eyes followed every detail. He felt interested and alert. Taking his time, he observed carefully. That feeling is curious.",
+      },
+      pt: {
+        name: "Curioso",
+        definition: "Querer saber ou aprender mais sobre algo.",
+        story: "Paulo viu um insetinho e se aproximou para observar. Os olhos acompanhavam cada movimento. Ele se sentiu atento e interessado. Com calma, continuou olhando. Esse sentimento é curiosidade.",
+      },
+      es: {
+        name: "Curioso",
+        definition: "Querer saber o aprender más sobre algo.",
+        story: "Paulo vio un bichito y se acercó para observarlo. Miraba cada movimiento con atenção. Se sentía interesado y despierto. Se tomó su tiempo. Ese sentimiento es curiosidad.",
+      },
+    },
+  },
+
+  {
+    id: "jealous",
+    emoji: "😒",
+    translations: {
+      en: {
+        name: "Jealous",
+        definition: "Wanting what someone else has.",
+        story: "Paulo saw a friend’s new toy and wished he had one too. His chest felt tight, and his thoughts compared. He paused and noticed the feeling without judging it. Then he chose to move on. That feeling is jealous.",
+      },
+      pt: {
+        name: "Com ciúmes",
+        definition: "Querer ter o que outra pessoa tem.",
+        story: "Paulo viu o brinquedo novo do amigo e quis ter um igual. Sentiu um aperto no peito e pensamentos de comparação. Ele parou, percebeu o sentimento e respirou. Depois, seguiu em frente. Esse sentimento é ciúme.",
+      },
+      es: {
+        name: "Celoso",
+        definition: "Querer lo que otra persona tiene.",
+        story: "Paulo vio el juguete nuevo de un amigo y quiso uno igual. Sintió tensión en el pecho. Reconoció el sentimiento sin juzgarlo. Luego siguió adelante. Ese sentimiento es celos.",
+      },
+    },
+  },
+
+  {
+    id: "lonely",
+    emoji: "😔",
+    translations: {
+      en: {
+        name: "Lonely",
+        definition: "Feeling alone and wishing for company.",
+        story: "Paulo looked for someone to play with, but the yard felt quiet. His body felt small and still. He noticed the emptiness and took a breath. After reaching out, he felt less alone. That feeling is lonely.",
+      },
+      pt: {
+        name: "Sozinho",
+        definition: "Sentir-se só e com vontade de ter companhia.",
+        story: "Paulo procurou alguém para brincar e o quintal estava silencioso. O corpo ficou quieto e pesado. Ele percebeu a solidão e respirou. Ao procurar companhia, sentiu alívio. Esse sentimento é solidão.",
+      },
+      es: {
+        name: "Solo",
+        definition: "Sentirse solo y con ganas de tener compañía.",
+        story: "Paulo buscó con quién jugar y el patio estaba silencioso. El cuerpo se sentía vacío. Reconoció la soledad y respiró. Luego buscó compañía. Ese sentimiento es soledad.",
+      },
+    },
+  },
+
+  {
+    id: "grateful",
+    emoji: "🙏",
+    translations: {
+      en: {
+        name: "Grateful",
+        definition: "Feeling thankful for something good.",
+        story: "A classmate shared snacks with Paulo and smiled. Paulo felt warmth spread inside his chest. He noticed appreciation and comfort. Taking a moment, he enjoyed the kindness. That feeling is grateful.",
+      },
+      pt: {
+        name: "Grato",
+        definition: "Sentir-se agradecido por algo bom.",
+        story: "Um colega dividiu o lanche com Paulo e sorriu. Um calor gostoso se espalhou no peito. Ele percebeu a gratidão e o conforto. Aproveitou o gesto com calma. Esse sentimento é gratidão.",
+      },
+      es: {
+        name: "Agradecido",
+        definition: "Sentirse agradecido por algo bueno.",
+        story: "Un compañero compartió su merienda con Paulo y sonrió. Sintió un calor agradable en el pecho. Reconoció la gratitud. Se tomó un momento para apreciarlo. Ese sentimiento es gratitud.",
+      },
+    },
+  },
+
+  {
+    id: "guilty",
+    emoji: "😟",
+    translations: {
+      en: {
+        name: "Guilty",
+        definition: "Feeling bad about something you did wrong.",
+        story: "Paulo broke a small rule and kept thinking about it. His body felt uneasy, and his thoughts replayed the moment. He paused and named the feeling. Choosing responsibility, he made things right. That feeling is guilty.",
+      },
+      pt: {
+        name: "Culpado",
+        definition: "Sentir-se mal por algo errado que você fez.",
+        story: "Paulo quebrou uma regrinha e ficou pensando nisso. O corpo ficou inquieto e a mente repetia a situação. Ele parou e reconheceu a culpa. Ao corrigir o erro, sentiu alívio. Esse sentimento é culpa.",
+      },
+      es: {
+        name: "Culpable",
+        definition: "Sentirse mal por algo malo que hiciste.",
+        story: "Paulo rompió una regla pequeña y no dejaba de pensar en eso. El cuerpo estaba inquieto. Reconoció la culpa y respiró. Luego intentó corregirlo. Ese sentimiento es culpa.",
+      },
+    },
+  },
+
+  {
+    id: "tired",
+    emoji: "😴",
+    translations: {
+      en: {
+        name: "Tired",
+        definition: "Feeling low on energy and needing rest.",
+        story: "Paulo played hard at recess, and later his eyes felt heavy. His body slowed down, and movements felt harder. He noticed the need for rest. After pausing, he took it easier. That feeling is tired.",
+      },
+      pt: {
+        name: "Cansado",
+        definition: "Sentir pouca energia e precisar descansar.",
+        story: "Paulo brincou muito no recreio e depois os olhos ficaram pesados. O corpo desacelerou e pediu descanso. Ele percebeu o cansaço e parou um pouco. Esse sentimento é cansaço.",
+      },
+      es: {
+        name: "Cansado",
+        definition: "Tener poca energía y necesitar descansar.",
+        story: "Paulo jugó mucho en el recreo y luego los ojos pesaban. El cuerpo pedía descanso. Reconoció el cansancio y se detuvo. Ese sentimiento es cansancio.",
+      },
+    },
+  },
+
+  {
+    id: "hopeful",
+    emoji: "🌈",
+    translations: {
+      en: {
+        name: "Hopeful",
+        definition: "Believing something good will happen.",
+        story: "Paulo had a rough moment, but believed tomorrow could be better. His chest felt warm as he imagined new chances. He noticed the light feeling inside. Holding onto that thought, he kept going. That feeling is hopeful.",
+      },
+      pt: {
+        name: "Esperançoso",
+        definition: "Acreditar que algo bom vai acontecer.",
+        story: "Paulo teve um momento difícil, mas acreditou que amanhã pode ser melhor. Sentiu um calor no peito ao pensar nisso. Ele percebeu a esperança crescer. Com esse pensamento, seguiu em frente. Esse sentimento é esperança.",
+      },
+      es: {
+        name: "Esperanzado",
+        definition: "Creer que algo bueno va a pasar.",
+        story: "Paulo tuvo un momento difícil, pero pensó que mañana podría mejorar. Sintió un calor interno. Reconoció la esperanza y siguió adelante. Ese sentimiento es esperanza.",
+      },
+    },
+  },
+
+  {
+    id: "relieved",
+    emoji: "😮‍💨",
+    translations: {
+      en: {
+        name: "Relieved",
+        definition: "Feeling better after worry is gone.",
+        story: "Paulo thought he had lost something important, then found it in his backpack. The tight feeling faded, and his breath slowed. He noticed the release in his body. Smiling, he moved on. That feeling is relieved.",
+      },
+      pt: {
+        name: "Aliviado",
+        definition: "Sentir-se melhor depois que a preocupação passa.",
+        story: "Paulo achou que tinha perdido algo, mas encontrou na mochila. O aperto passou e a respiração acalmou. Ele percebeu o alívio no corpo. Com um sorriso, seguiu em frente. Esse sentimento é alívio.",
+      },
+      es: {
+        name: "Aliviado",
+        definition: "Sentirse mejor después de que pasa la preocupación.",
+        story: "Paulo pensó que había perdido algo y luego lo encontró. El cuerpo se relajó y la respiración se calmó. Reconoció el alivio. Ese sentimiento es alivio.",
+      },
+    },
+  },
+
+  {
+    id: "frustrated",
+    emoji: "😤",
+    translations: {
+      en: {
+        name: "Frustrated",
+        definition: "Feeling upset when things don’t work the way you want.",
+        story: "Paulo tried tying his shoelaces, but the knot kept slipping. His body felt tense, and his patience ran low. He paused, took a breath, and noticed the frustration. After asking for help, he tried again. That feeling is frustrated.",
+      },
+      pt: {
+        name: "Frustrado",
+        definition: "Sentir-se chateado quando as coisas não dão certo.",
+        story: "Paulo tentou amarrar o tênis, mas o laço soltava. O corpo ficou tenso e a paciência diminuiu. Ele respirou e percebeu a frustração. Com ajuda, tentou novamente. Esse sentimento é frustração.",
+      },
+      es: {
+        name: "Frustrado",
+        definition: "Sentirse molesto cuando las cosas no salen como quieres.",
+        story: "Paulo intentó atarse los cordones, pero no funcionaba. El cuerpo se tensó y la paciencia bajó. Reconoció la frustración y respiró. Luego lo intentó otra vez. Ese sentimiento es frustración.",
+      },
+    },
+  },
+
+  {
+    id: "safe",
+    emoji: "🛡️",
+    translations: {
+      en: {
+        name: "Safe",
+        definition: "Feeling protected and secure.",
+        story: "Paulo walked beside a trusted adult and felt protected. His body relaxed, and his steps felt steady. He noticed the calm that came from not being alone. Staying close, he felt secure. That feeling is safe.",
+      },
+      pt: {
+        name: "Seguro",
+        definition: "Sentir-se protegido e tranquilo.",
+        story: "Paulo caminhou com um adulto de confiança e se sentiu protegido. O corpo relaxou e os passos ficaram firmes. Ele percebeu a tranquilidade de estar acompanhado. Esse sentimento é segurança.",
+      },
+      es: {
+        name: "Seguro",
+        definition: "Sentirse protegido y tranquilo.",
+        story: "Paulo caminó con un adulto de confianza y se sintió protegido. El cuerpo se relajó y se sintió tranquilo. Notó la seguridad de no estar solo. Ese sentimiento es seguridad.",
+      },
+    },
+  },
+
+  {
+    id: "confident",
+    emoji: "💪",
+    translations: {
+      en: {
+        name: "Confident",
+        definition: "Believing in yourself and what you can do.",
+        story: "Paulo answered a question in class and spoke clearly. His body felt strong and steady. He noticed trust in his own ability. Standing tall, he stayed with that feeling. That feeling is confident.",
+      },
+      pt: {
+        name: "Confiante",
+        definition: "Acreditar em si mesmo e no que você consegue fazer.",
+        story: "Paulo respondeu uma pergunta na aula com clareza. O corpo se sentiu firme e seguro. Ele percebeu a confiança em si mesmo. Mantendo a postura, seguiu confiante. Esse sentimento é confiança.",
+      },
+      es: {
+        name: "Confiado",
+        definition: "Creer en ti mismo y en lo que puedes hacer.",
+        story: "Paulo respondió una pregunta en clase con claridad. El cuerpo se sintió fuerte y estable. Reconoció la confianza en sí mismo. Se mantuvo firme. Ese sentimiento es confianza.",
+      },
+    },
+  },
 ];
+
     
     const languageConfigs = {
       en: { code: "en", label: "English" },
