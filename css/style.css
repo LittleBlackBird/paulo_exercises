@@ -697,7 +697,7 @@ body[data-theme="dark"] .feeling-story-block { background: rgba(0,0,0,0.18); }
   margin-bottom: 0.4rem;
 }
 /* Big, easy-to-read story text (doubled) */
-.feeling-story { font-size: 1.9rem; line-height: 1.5; font-weight: 600; color: var(--ink); }
+.feeling-story { font-size: 0.9rem; line-height: 1.5; font-weight: 600; color: var(--ink); }
 
 .narration-controls { display: flex; gap: 0.6rem; margin-top: 1rem; }
 .narration-btn {
