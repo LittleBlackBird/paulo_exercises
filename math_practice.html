@@ -5,44 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exercises for Paulo</title>
 
-    <!-- Pyodide for Python execution on the quiz page -->
-    <script src="https://cdn.jsdelivr.net/pyodide/v0.22.1/full/pyodide.js"></script>
-
     <!-- External CSS file -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body data-theme="dark">
+<body data-theme="light">
 
     <header class="app-header">
         <div id="nav_bar"></div>
         <div class="title-block">
             <h1>Math Quiz</h1>
-            <p class="subtitle">Division challenges powered by Python in your browser.</p>
+            <p class="subtitle">8 exercises per study session — your progress is saved automatically.</p>
         </div>
-
     </header>
 
     <div class="app">
 
+        <div id="sessionStatus"></div>
 
         <main class="card">
-            <label for="num_problems" class="question-label">
-                Paulo, how many problems do you want to solve?
-            </label>
+            <p class="question-label">
+                Paulo, each study session has <strong>8 exercises</strong>:
+                divisions (with decimals), one concept question, and surprises like
+                equations, geometry, primes, sets, probability, tables and more.
+                Your progress is <strong>saved automatically</strong> — you can stop and come back.
+            </p>
 
             <div class="controls-row">
-                <input type="number" id="num_problems" min="1" required>
-                <button id="generateBtn">Generate Problems</button>
+                <button id="generateBtn">Start / Continue my 8 exercises</button>
+                <span id="quizProgress" class="quiz-progress"></span>
             </div>
 
+            <p id="quizMessage" class="quiz-message"></p>
+
             <ol id="problems" class="problems-list"></ol>
-
-
         </main>
     </div>
 
     <script async src="https://tenor.com/embed.js"></script>
     <script src="js/load_nav.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/session.js"></script>
+    <script src="js/quiz.js"></script>
     <script src="js/script.js"></script>
 </body>
 </html>

@@ -5,9 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Practice Area - Paulo</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css" />
 </head>
-<body data-theme="dark">
+<body data-theme="light">
     <div class="app">
         <header class="app-header">
             <div id="nav_bar"></div>
@@ -15,14 +18,16 @@
                 <h1>Practice Area</h1>
                 <p class="subtitle">Extra exercises, tips, and progress tracking for Paulo.</p>
             </div>
-
-
         </header>
+
+        <div id="sessionStatus"></div>
 
         <main class="card">
             <h2 style="margin-bottom: 0.75rem;">Welcome, Paulo 👋</h2>
-            <p style="font-size: 0.95rem; color: var(--color-muted); margin-bottom: 1.2rem;">
-                Here are your practice tasks. When you finish all of them, you unlock a surprise video.
+            <p style="font-size: 0.95rem; color: var(--muted); margin-bottom: 1.2rem;">
+                Here are your practice tasks. Finishing the <strong>8 math exercises</strong> and this whole
+                checklist completes one <strong>study session</strong> and earns you <strong>50 points</strong>
+                (up to 500). Everything is saved as you go, even if you stop in the middle.
             </p>
 
             <h3 style="font-size: 1rem; margin-bottom: 0.6rem;">Today’s checklist ✅</h3>
@@ -30,8 +35,10 @@
             <ul class="practice-checklist">
                 <li>
                     <label>
-                        <input type="checkbox" class="practice-task">
-                        Solve at least <strong>6 math problems</strong> on the Quiz page.
+                        <input type="checkbox" class="practice-task" data-task="math" disabled>
+                        Solve the <strong>8 math exercises</strong> on the Math Practice page.
+                        <span id="mathTaskCount" class="task-count"></span>
+                        <em class="task-auto-note">— checked automatically when you finish them</em>
                     </label>
                 </li>
                 <li>
@@ -49,7 +56,7 @@
                 <li>
                     <label>
                         <input type="checkbox" class="practice-task">
-                        Estudy <strong>history</strong> with your dad.
+                        Study <strong>history</strong> with your dad.
                     </label>
                 </li>
                 <li>
@@ -60,9 +67,13 @@
                 </li>
             </ul>
 
-            <p style="font-size: 0.9rem; color: var(--color-muted); margin-top: 1rem;">
+            <p style="font-size: 0.9rem; color: var(--muted); margin-top: 1rem;">
                 When all the tasks are checked, a reward video will open automatically 🎁
+                — and when the math is also done, you win <strong>+50 points</strong>!
             </p>
+
+            <!-- Parent area: accuracy report, streak, backup/import, settings -->
+            <div id="parentPanel"></div>
         </main>
         <div class="reward-modal">
         <div class="reward-card">
@@ -74,7 +85,10 @@
         </div>
     </div>
     <script src="js/load_nav.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/session.js"></script>
     <script src="js/script.js"></script>
     <script src="js/practice_reward.js"></script>
+    <script src="js/parent.js"></script>
 </body>
 </html>

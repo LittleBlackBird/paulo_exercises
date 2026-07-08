@@ -4,16 +4,13 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Music Game</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
-
-  <!--
-    Pyodide loads a Python runtime into the browser.
-    It defines a global function `loadPyodide()` which we call later in JS.
-  -->
-  <script src="https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js"></script>
 </head>
 
-<body>
+<body data-theme="light">
   <header class="app-header">
     <div id="nav_bar"></div>
   </header>
@@ -21,8 +18,8 @@
   <main class="page">
     <h1>Music Game 🎵</h1>
     <p class="muted">
-      Goal: hear the note and guess which of the 7 notes (C D E F G A B) is playing.
-      1 or 2 players.
+      <strong>Phase 1:</strong> hear ONE note and guess which of the 7 notes (C D E F G A B) is playing.<br>
+      <strong>Phase 2:</strong> hear TWO notes in a row and guess BOTH, in order! 1 or 2 players.
     </p>
 
     <div class="card">
@@ -36,7 +33,7 @@
         </label>
 
         <label>
-          Rounds:
+          Rounds per phase:
           <input id="roundsInput" type="number" min="1" max="50" value="10" />
         </label>
 
@@ -51,6 +48,7 @@
 
         <button id="startBtn">Start / Reset</button>
         <button id="playBtn" disabled>Play Note</button>
+        <button id="replayBtn" disabled title="Replays the notes — but you won't score this round">🔁 Hear it again</button>
         <button id="testToneBtn">Test Tone (A4)</button>
       </div>
 
@@ -64,7 +62,7 @@
         <button class="noteBtn" data-note="B" disabled>B</button>
       </div>
 
-      <p id="status" class="muted" style="margin-top:12px;">Load Pyodide…</p>
+      <p id="status" class="muted" style="margin-top:12px;">Click Start / Reset to begin.</p>
     </div>
 
     <div class="card">
@@ -75,12 +73,11 @@
 
   <script>
     /**********************************************************************
-     * SECTION 1 — WEB AUDIO (JavaScript)
+     * SECTION 1 — WEB AUDIO
      *
-     * We generate sound using the Web Audio API (Oscillator + Gain envelope).
-     *
-     * Key rule: Browsers usually require a user gesture to allow audio.
-     * That’s why we call `unlockAudio()` inside click handlers.
+     * We generate sound using the Web Audio API (Oscillator + Gain
+     * envelope). Browsers require a user gesture to allow audio, which
+     * is why we call `unlockAudio()` inside click handlers.
      **********************************************************************/
 
     // Frequencies for octave 4 (C4..B4). Other octaves are x2 or /2.
@@ -89,280 +86,353 @@
       "G": 391.9954, "A": 440.0000, "B": 493.8833
     };
 
+    const NOTES = ["C", "D", "E", "F", "G", "A", "B"];
+
     let audioCtx = null;
 
     function ensureAudio() {
-      // Create one AudioContext for the whole app
       if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       return audioCtx;
     }
 
     function freqForOctave(note, octave) {
       // Base is octave 4. Every octave up doubles frequency.
-      const base = NOTE_FREQS[note];
-      const shift = octave - 4;
-      return base * Math.pow(2, shift);
+      return NOTE_FREQS[note] * Math.pow(2, octave - 4);
     }
 
     async function unlockAudio() {
-      // Must be called from a user gesture (click) to reliably enable sound.
       const ctx = ensureAudio();
       if (ctx.state !== "running") await ctx.resume();
     }
 
-    async function playTone(freq, seconds = 0.9) {
-      const ctx = ensureAudio();
-      if (ctx.state !== "running") await ctx.resume();
+    function playTone(freq, seconds = 0.9) {
+      return new Promise(async (resolve) => {
+        const ctx = ensureAudio();
+        if (ctx.state !== "running") await ctx.resume();
 
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
 
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
 
-      // Envelope (avoid clicking sounds)
-      const now = ctx.currentTime;
-      const end = now + seconds;
+        // Envelope (avoids clicking sounds)
+        const now = ctx.currentTime;
+        const end = now + seconds;
 
-      gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.exponentialRampToValueAtTime(0.25, now + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.0001, end);
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.exponentialRampToValueAtTime(0.25, now + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, end);
 
-      osc.connect(gain);
-      gain.connect(ctx.destination);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
 
-      osc.start(now);
-      osc.stop(end);
+        osc.onended = () => resolve();
+        osc.start(now);
+        osc.stop(end);
+      });
     }
 
-    // Bridge function: Python picks the note; JS plays it.
-    window.js_play_note = async (note, octave) => {
-      const freq = freqForOctave(note, octave);
-      await playTone(freq, 0.9);
+    async function playNote(note, octave, seconds = 0.9) {
+      await playTone(freqForOctave(note, octave), seconds);
+    }
+
+    // Small pause between the two notes of a Phase 2 sequence
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+    /**********************************************************************
+     * SECTION 2 — GAME LOGIC (pure JavaScript)
+     *
+     * This game was originally written in Python and executed with
+     * Pyodide. It has been converted to JavaScript, so no runtime needs
+     * to be downloaded — the game is ready instantly.
+     *
+     * PHASES:
+     *   Phase 1 — each round plays 1 note; guess it.
+     *   Phase 2 — each round plays 2 notes IN A ROW; guess both, in order.
+     * When Phase 1's rounds finish, Phase 2 starts automatically.
+     **********************************************************************/
+
+    const game = {
+      mode: 1,
+      roundsPerPhase: 10,
+      octave: 4,
+
+      phase: 1,          // 1 = single note, 2 = two notes in a row
+      round: 0,          // round inside the current phase
+      turn: 1,           // player whose turn it is
+      targets: null,     // array of notes to guess this round (1 or 2)
+      guessPos: 0,       // which note of the sequence is being guessed
+      roundHadMistake: false,
+      replayedThisRound: false, // used "Hear it again" → this round can't score
+      started: false,
+
+      // score per phase: score[phase][player]
+      score: { 1: { 1: 0, 2: 0 }, 2: { 1: 0, 2: 0 } },
+
+      reset(mode, rounds, octave) {
+        this.mode = mode;
+        this.roundsPerPhase = rounds;
+        this.octave = octave;
+        this.phase = 1;
+        this.round = 0;
+        this.turn = 1;
+        this.targets = null;
+        this.guessPos = 0;
+        this.roundHadMistake = false;
+        this.replayedThisRound = false;
+        this.started = true;
+        this.score = { 1: { 1: 0, 2: 0 }, 2: { 1: 0, 2: 0 } };
+      },
+
+      isFinished() {
+        return this.phase === 2 && this.round >= this.roundsPerPhase && !this.targets;
+      },
+
+      // A round is "active" once notes have been played and not yet fully guessed.
+      roundActive() {
+        return !!this.targets;
+      },
+
+      // Replays the current round's notes. Using it costs the point for
+      // this round (roundHadMistake stays true so it can't score).
+      replayCurrent() {
+        if (!this.targets) return null;
+        this.replayedThisRound = true;
+        this.roundHadMistake = true;
+        return this.targets.slice();
+      },
+
+      // Prepares the next round. Returns info about it, or null if over.
+      nextRound() {
+        if (!this.started) return { ok: false, msg: "Start the game first." };
+
+        // Move to Phase 2 when Phase 1's rounds are over
+        if (this.round >= this.roundsPerPhase) {
+          if (this.phase === 1) {
+            this.phase = 2;
+            this.round = 0;
+          } else {
+            return { ok: false, msg: "Game finished." };
+          }
+        }
+
+        this.round += 1;
+        this.turn = this.mode === 1 ? 1 : (this.round % 2 === 1 ? 1 : 2);
+
+        const howMany = this.phase === 1 ? 1 : 2;
+        this.targets = Array.from({ length: howMany },
+          () => NOTES[Math.floor(Math.random() * NOTES.length)]);
+        this.guessPos = 0;
+        this.roundHadMistake = false;
+        this.replayedThisRound = false;
+
+        return {
+          ok: true,
+          phase: this.phase,
+          round: this.round,
+          roundsTotal: this.roundsPerPhase,
+          turn: this.turn,
+          targets: this.targets.slice(),
+          octave: this.octave,
+        };
+      },
+
+      // Handles one guessed note. In Phase 2 this is called twice per round.
+      guess(note) {
+        if (!this.targets) return { ok: false, msg: "Press 'Play Note' first." };
+
+        note = String(note || "").trim().toUpperCase();
+        if (!NOTES.includes(note)) return { ok: false, msg: "Invalid note." };
+
+        const expected = this.targets[this.guessPos];
+        const correct = note === expected;
+        if (!correct) this.roundHadMistake = true;
+
+        this.guessPos += 1;
+        const sequenceDone = this.guessPos >= this.targets.length;
+
+        let roundWon = false;
+        if (sequenceDone) {
+          roundWon = !this.roundHadMistake;
+          if (roundWon) this.score[this.phase][this.turn] += 1;
+          this.targets = null;
+        }
+
+        const phaseJustEnded = sequenceDone && this.round >= this.roundsPerPhase;
+
+        return {
+          ok: true,
+          correct,
+          sequenceDone,
+          roundWon,
+          allNotesCorrect: sequenceDone && !this._hadWrongNote(),
+          replayed: this.replayedThisRound,
+          notesRemaining: sequenceDone ? 0 : this.targets.length - this.guessPos,
+          player: this.turn,
+          phase: this.phase,
+          round: this.round,
+          roundsTotal: this.roundsPerPhase,
+          phaseJustEnded,
+          gameFinished: phaseJustEnded && this.phase === 2,
+        };
+      },
+
+      scoreboardText() {
+        const p1 = `Phase 1 (one note)      — Player 1: ${this.score[1][1]}` +
+          (this.mode === 2 ? ` | Player 2: ${this.score[1][2]}` : "");
+        const p2 = `Phase 2 (two in a row)  — Player 1: ${this.score[2][1]}` +
+          (this.mode === 2 ? ` | Player 2: ${this.score[2][2]}` : "");
+        const extra = this.mode === 2 ? "\nTurn alternates by round (odd = P1, even = P2)." : "";
+        return `${p1}\n${p2}\nCurrent: Phase ${this.phase}, round ${this.round}/${this.roundsPerPhase}${extra}`;
+      },
     };
 
     /**********************************************************************
-     * SECTION 2 — PYODIDE (Python in the browser)
-     *
-     * Important change (fix):
-     * Different Pyodide versions expose different JS conversion helpers.
-     * To avoid "toJs/to_js not a function" issues forever,
-     * we return JSON strings from Python and parse them in JS.
+     * SECTION 3 — UI
      **********************************************************************/
 
-    let pyodide = null;
-
-    // Cache DOM elements
     const statusEl = document.getElementById("status");
     const scoreBox = document.getElementById("scoreBox");
     const startBtn = document.getElementById("startBtn");
     const playBtn = document.getElementById("playBtn");
+    const replayBtn = document.getElementById("replayBtn");
     const modeSelect = document.getElementById("modeSelect");
     const roundsInput = document.getElementById("roundsInput");
     const octaveSelect = document.getElementById("octaveSelect");
     const noteButtons = Array.from(document.querySelectorAll(".noteBtn"));
 
+    // Master on/off for the whole play area (used at start / game over).
     function setButtonsEnabled(enabled) {
       playBtn.disabled = !enabled;
       noteButtons.forEach(b => b.disabled = !enabled);
+      replayBtn.disabled = true; // replay only enabled during an active round
     }
 
-    async function initPyodide() {
-      statusEl.textContent = "Loading Pyodide runtime…";
-      pyodide = await loadPyodide();
-
-      statusEl.textContent = "Loading Python game…";
-
-      const pyCode = `
-import random, json
-
-NOTES = ["C","D","E","F","G","A","B"]
-
-class MusicGame:
-    def __init__(self):
-        self.reset(mode=1, rounds=10, octave=4)
-
-    def reset(self, mode=1, rounds=10, octave=4):
-        self.mode = int(mode)
-        self.rounds_total = int(rounds)
-        self.octave = int(octave)
-
-        self.round = 0
-        self.turn = 1
-        self.target = None
-        self.started = True
-
-        self.score = {1: 0, 2: 0}
-        self.history = []
-
-    def next_round(self):
-        if not self.started:
-            return json.dumps({"ok": False, "msg": "Start the game first."})
-
-        if self.round >= self.rounds_total:
-            return json.dumps({"ok": False, "msg": "Game finished."})
-
-        self.round += 1
-        self.turn = 1 if self.mode == 1 else (1 if self.round % 2 == 1 else 2)
-        self.target = random.choice(NOTES)
-
-        return json.dumps({
-            "ok": True,
-            "round": self.round,
-            "rounds_total": self.rounds_total,
-            "turn": self.turn,
-            "target": self.target,
-            "octave": self.octave
-        })
-
-    def guess(self, note):
-        if self.target is None:
-            return json.dumps({"ok": False, "msg": "Press 'Play Note' first."})
-
-        note = (note or "").strip().upper()
-        if note not in NOTES:
-            return json.dumps({"ok": False, "msg": "Invalid note."})
-
-        correct = (note == self.target)
-        if correct:
-            self.score[self.turn] += 1
-
-        self.history.append({
-            "round": self.round,
-            "player": self.turn,
-            "target": self.target,
-            "guess": note,
-            "correct": correct
-        })
-
-        self.target = None
-        finished = (self.round >= self.rounds_total)
-
-        return json.dumps({
-            "ok": True,
-            "correct": correct,
-            "player": self.turn,
-            "score": dict(self.score),
-            "round": self.round,
-            "rounds_total": self.rounds_total,
-            "finished": finished
-        })
-
-    def scoreboard_text(self):
-        if self.mode == 1:
-            return f"Player 1: {self.score[1]} / {self.rounds_total} correct"
-        else:
-            return (
-                f"Player 1: {self.score[1]}\\n"
-                f"Player 2: {self.score[2]}\\n"
-                f"Rounds: {self.round} / {self.rounds_total}\\n"
-                f"Turn alternates by round (odd=P1, even=P2)."
-            )
-
-game = MusicGame()
-      `;
-
-      await pyodide.runPythonAsync(pyCode);
-
-      statusEl.textContent = "Ready. Click Start / Reset.";
-      scoreBox.textContent = "—";
-    }
-
-    function pyGet(name) {
-      return pyodide.globals.get(name);
+    // Reflects whether a round is currently in progress:
+    //   • during a round → Play is locked (can't discard it), notes + replay on
+    //   • between rounds  → Play on, notes + replay off
+    function syncControls() {
+      const active = game.roundActive();
+      playBtn.disabled = active;
+      replayBtn.disabled = !active;
+      noteButtons.forEach(b => b.disabled = !active);
     }
 
     function updateScoreboard() {
-      const game = pyGet("game");
-      scoreBox.textContent = game.scoreboard_text();
+      scoreBox.textContent = game.scoreboardText();
     }
 
-    async function startGame() {
-      if (!pyodide) {
-        statusEl.textContent = "Pyodide is still loading… wait a moment and try again.";
-        return;
-      }
-
-      const mode   = parseInt(modeSelect.value, 10);
+    function startGame() {
+      const mode = parseInt(modeSelect.value, 10);
       const rounds = Math.max(1, Math.min(50, parseInt(roundsInput.value || "10", 10)));
       const octave = parseInt(octaveSelect.value, 10);
 
-      const game = pyGet("game");
       game.reset(mode, rounds, octave);
 
-      statusEl.textContent = "Game started. Click 'Play Note'.";
+      statusEl.textContent = "Game started — Phase 1 (one note). Click 'Play Note'.";
+      playBtn.textContent = "Play Note";
       updateScoreboard();
       setButtonsEnabled(true);
+      syncControls(); // no active round yet → Play on, notes/replay off
+    }
+
+    // Plays the notes of the CURRENT round (used by both a new round and replay).
+    async function playCurrentNotes() {
+      const octave = parseInt(octaveSelect.value, 10);
+      if (game.phase === 1) {
+        await playNote(game.targets[0], octave);
+      } else {
+        await playNote(game.targets[0], octave, 0.8);
+        await sleep(250);
+        await playNote(game.targets[1], octave, 0.8);
+      }
     }
 
     async function playNewRoundAndSound() {
-      try {
-        const game = pyGet("game");
+      // Guard: never discard an active round by starting a new one.
+      if (game.roundActive()) {
+        statusEl.textContent = "Finish guessing this round first — or use 🔁 Hear it again.";
+        return;
+      }
 
-        const jsonStr = game.next_round();
-        const info = JSON.parse(jsonStr);
+      const info = game.nextRound();
 
-        console.log("Round info from Python (parsed JSON):", info);
+      if (!info.ok) {
+        statusEl.textContent = info.msg || "Game finished.";
+        setButtonsEnabled(false);
+        return;
+      }
 
-        if (!info.ok) {
-          statusEl.textContent = info.msg || "Game finished.";
-          setButtonsEnabled(false);
-          return;
-        }
+      game.octave = parseInt(octaveSelect.value, 10);
+      syncControls(); // a round is now active → lock Play, enable notes + replay
 
+      if (info.phase === 1) {
+        playBtn.textContent = "Play Note";
         statusEl.textContent =
-          `Round ${info.round}/${info.rounds_total} — Player ${info.turn}: listen and guess.`;
-
-        await window.js_play_note(info.target, parseInt(octaveSelect.value, 10));
-      } catch (err) {
-        console.error("Play Note error:", err);
-        statusEl.textContent = `❌ Error (see console): ${err?.message || err}`;
+          `Phase 1 — Round ${info.round}/${info.roundsTotal} — Player ${info.turn}: listen and guess the note.`;
+      } else {
+        playBtn.textContent = "Play 2 Notes";
+        statusEl.textContent =
+          `Phase 2 — Round ${info.round}/${info.roundsTotal} — Player ${info.turn}: listen to TWO notes and guess them IN ORDER.`;
       }
+      await playCurrentNotes();
+      if (info.phase === 2) statusEl.textContent += " Now click the 1st note you heard.";
+      updateScoreboard();
     }
 
-    async function makeGuess(note) {
-      try {
-        const game = pyGet("game");
+    function makeGuess(note) {
+      const res = game.guess(note);
 
-        const jsonStr = game.guess(note);
-        const res = JSON.parse(jsonStr);
+      if (!res.ok) {
+        statusEl.textContent = res.msg || "Invalid action.";
+        return;
+      }
 
-        console.log("Guess result from Python (parsed JSON):", res);
-
-        if (!res.ok) {
-          statusEl.textContent = res.msg || "Invalid action.";
-          return;
-        }
-
+      if (!res.sequenceDone) {
+        // Phase 2, first of the two notes guessed
         statusEl.textContent = res.correct
-          ? `✅ Correct! Player ${res.player} scores. Click 'Play Note' for next round.`
-          : `❌ Not this one. Click 'Play Note' for next round.`;
-
-        updateScoreboard();
-
-        if (res.finished) {
-          statusEl.textContent += " Game finished!";
-          setButtonsEnabled(false);
-        }
-      } catch (err) {
-        console.error("Guess error:", err);
-        statusEl.textContent = `❌ Error (see console): ${err?.message || err}`;
+          ? `✅ First note right! Now click the 2nd note you heard.`
+          : `❌ First note was not that one… still try the 2nd note you heard!`;
+        return;
       }
-    }
 
-    /**********************************************************************
-     * SECTION 3 — UI EVENT LISTENERS
-     **********************************************************************/
+      // The round's sequence is complete
+      if (res.phase === 1) {
+        statusEl.textContent = res.roundWon
+          ? `✅ Correct! Player ${res.player} scores. Click 'Play Note' for the next round.`
+          : `❌ Not this one. Click 'Play Note' for the next round.`;
+      } else {
+        statusEl.textContent = res.roundWon
+          ? `✅ BOTH notes right, in order! Player ${res.player} scores. Click 'Play 2 Notes' for the next round.`
+          : `❌ Not quite — you need both notes right, in order. Click 'Play 2 Notes' to try a new round.`;
+      }
+
+      updateScoreboard();
+
+      if (res.gameFinished) {
+        statusEl.textContent += " 🏁 Game finished! Press Start / Reset to play again.";
+        setButtonsEnabled(false);
+        playBtn.textContent = "Play Note";
+        return;
+      } else if (res.phaseJustEnded) {
+        statusEl.textContent +=
+          " 🎉 Phase 1 complete — PHASE 2 unlocked: now you'll hear TWO notes in a row!";
+        playBtn.textContent = "Play 2 Notes";
+      }
+
+      // Round finished (not the game) → unlock Play for the next one.
+      syncControls();
+    }
 
     document.getElementById("testToneBtn").addEventListener("click", async () => {
       await unlockAudio();
       await playTone(440, 0.6);
-      console.log("Played A4 test tone");
     });
 
     startBtn.addEventListener("click", async () => {
       await unlockAudio();
-      await startGame();
+      startGame();
     });
 
     playBtn.addEventListener("click", async () => {
@@ -370,36 +440,35 @@ game = MusicGame()
       await playNewRoundAndSound();
     });
 
-    // ✅ CHANGED:
+    // "Hear it again" — replays the current round's notes. Using it means
+    // this round can't score (a small, fair cost for the extra help).
+    replayBtn.addEventListener("click", async () => {
+      if (!game.roundActive()) return;
+      await unlockAudio();
+      const firstTime = !game.replayedThisRound;
+      game.replayCurrent();
+      await playCurrentNotes();
+      if (firstTime) {
+        statusEl.textContent = "🔁 Replayed — this round won't score, but take your time and guess!";
+      }
+    });
+
     // When the user clicks a note button:
     // 1) we play THAT note immediately (instant feedback)
-    // 2) then we submit it as a guess to Python (score right/wrong)
+    // 2) then we submit it as a guess (right or wrong)
     noteButtons.forEach(btn => {
       btn.addEventListener("click", async () => {
         await unlockAudio();
-
-        // Play the note the user clicked using the currently selected octave
         const octave = parseInt(octaveSelect.value, 10);
-        await window.js_play_note(btn.dataset.note, octave);
-
-        // Now score the guess (right or wrong)
-        await makeGuess(btn.dataset.note);
+        await playNote(btn.dataset.note, octave, 0.5);
+        makeGuess(btn.dataset.note);
       });
     });
 
     setButtonsEnabled(false);
-    initPyodide();
-  </script>
-
-  <script>
-    const themeToggle = document.getElementById("themeToggle");
-    if (themeToggle) {
-      themeToggle.addEventListener("change", () => {
-        document.documentElement.classList.toggle("dark", themeToggle.checked);
-      });
-    }
   </script>
 
   <script src="js/load_nav.js"></script>
+  <script src="js/ui.js"></script>
 </body>
 </html>

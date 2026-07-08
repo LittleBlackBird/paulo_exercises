@@ -5,39 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exercises for Paulo</title>
 
-    <!-- Pyodide for Python execution on the quiz page -->
-    <script src="https://cdn.jsdelivr.net/pyodide/v0.22.1/full/pyodide.js"></script>
-
     <!-- External CSS file -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body data-theme="dark">
+<body data-theme="light">
     <header class="app-header">
         <div id="nav_bar"></div>
-      </header>
-      
-      <div class="app">
+    </header>
 
-            <!-- Tenor GIF -->
-            <div class="tenor-wrapper">
-                <div class="tenor-gif-embed"
-                     data-postid="7803634016159579329"
-                     data-share-method="host"
-                     data-aspect-ratio="1"
-                     data-width="100%">
-                    <a href="https://tenor.com/view/brainrot-brain-rot-67-six-seven-6-gif-7803634016159579329">
-                        Brainrot Brain Rot GIF
-                    </a>
-                    from
-                    <a href="https://tenor.com/search/brainrot-gifs">Brainrot GIFs</a>
-                </div>
+    <div class="app">
 
-        </main>
+        <div class="title-block">
+            <h1>Hi Paulo! 🚀</h1>
+            <p class="subtitle">Every study day fills a stone on your trail. Reach the trophy at 500!</p>
+        </div>
+
+        <!-- Points counter: 0 to 500, each study session = 50 points.
+             A session = 8 math exercises + the Practice Area checklist. -->
+        <div id="sessionStatus"></div>
+
+        <!-- Reminder to finish an unfinished session (progress is saved) -->
+        <div id="sessionReminder"></div>
+
+        <!-- Tenor GIF -->
+        <div class="tenor-wrapper">
+            <div class="tenor-gif-embed"
+                 data-postid="7803634016159579329"
+                 data-share-method="host"
+                 data-aspect-ratio="1"
+                 data-width="100%">
+                <a href="https://tenor.com/view/brainrot-brain-rot-67-six-seven-6-gif-7803634016159579329">
+                    Brainrot Brain Rot GIF
+                </a>
+                from
+                <a href="https://tenor.com/search/brainrot-gifs">Brainrot GIFs</a>
+            </div>
+        </div>
     </div>
 
     <script async src="https://tenor.com/embed.js"></script>
     <script src="js/load_nav.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/session.js"></script>
     <script src="js/script.js"></script>
-    
 </body>
 </html>
