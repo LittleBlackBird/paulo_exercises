@@ -170,6 +170,9 @@
       // score per phase: score[phase][player]
       score: { 1: { 1: 0, 2: 0 }, 2: { 1: 0, 2: 0 } },
 
+      guesses: [],  // notes clicked in the current round (for the log)
+      log: [],      // one entry per finished round (the attempt history)
+
       reset(mode, rounds, octave) {
         this.mode = mode;
         this.roundsPerPhase = rounds;
@@ -183,6 +186,8 @@
         this.replayedThisRound = false;
         this.started = true;
         this.score = { 1: { 1: 0, 2: 0 }, 2: { 1: 0, 2: 0 } };
+        this.guesses = [];
+        this.log = [];
       },
 
       isFinished() {
@@ -226,6 +231,7 @@
         this.guessPos = 0;
         this.roundHadMistake = false;
         this.replayedThisRound = false;
+        this.guesses = [];
 
         return {
           ok: true,
@@ -248,6 +254,7 @@
         const expected = this.targets[this.guessPos];
         const correct = note === expected;
         if (!correct) this.roundHadMistake = true;
+        this.guesses.push(note);
 
         this.guessPos += 1;
         const sequenceDone = this.guessPos >= this.targets.length;
@@ -256,6 +263,16 @@
         if (sequenceDone) {
           roundWon = !this.roundHadMistake;
           if (roundWon) this.score[this.phase][this.turn] += 1;
+          // Log this attempt (the round's history shown in the score box).
+          this.log.push({
+            phase: this.phase,
+            round: this.round,
+            player: this.turn,
+            targets: this.targets.slice(),
+            guesses: this.guesses.slice(),
+            won: roundWon,
+            replayed: this.replayedThisRound,
+          });
           this.targets = null;
         }
 
@@ -266,7 +283,6 @@
           correct,
           sequenceDone,
           roundWon,
-          allNotesCorrect: sequenceDone && !this._hadWrongNote(),
           replayed: this.replayedThisRound,
           notesRemaining: sequenceDone ? 0 : this.targets.length - this.guessPos,
           player: this.turn,
@@ -284,7 +300,19 @@
         const p2 = `Phase 2 (two in a row)  — Player 1: ${this.score[2][1]}` +
           (this.mode === 2 ? ` | Player 2: ${this.score[2][2]}` : "");
         const extra = this.mode === 2 ? "\nTurn alternates by round (odd = P1, even = P2)." : "";
-        return `${p1}\n${p2}\nCurrent: Phase ${this.phase}, round ${this.round}/${this.roundsPerPhase}${extra}`;
+
+        // Attempt history — most recent first, capped at the last 10.
+        let history = "";
+        if (this.log.length) {
+          const lines = this.log.slice(-10).reverse().map((e) => {
+            const who = this.mode === 2 ? ` P${e.player}` : "";
+            const mark = e.won ? "✅" : (e.replayed ? "🔁" : "❌");
+            return `${mark} Ph${e.phase} R${e.round}${who}: was ${e.targets.join("+")} — you clicked ${e.guesses.join("+")}`;
+          });
+          history = `\n\nAttempts (latest first):\n${lines.join("\n")}`;
+        }
+
+        return `${p1}\n${p2}\nCurrent: Phase ${this.phase}, round ${this.round}/${this.roundsPerPhase}${extra}${history}`;
       },
     };
 
@@ -305,29 +333,37 @@
     // Master on/off for the whole play area (used at start / game over).
     function setButtonsEnabled(enabled) {
       playBtn.disabled = !enabled;
+      // Notes stay enabled whenever the game is running, so the player can
+      // rehearse (hear) any note freely — only an active round turns a
+      // click into a scored guess (see the note button handler below).
       noteButtons.forEach(b => b.disabled = !enabled);
       replayBtn.disabled = true; // replay only enabled during an active round
     }
 
     // Reflects whether a round is currently in progress:
-    //   • during a round → Play is locked (can't discard it), notes + replay on
-    //   • between rounds  → Play on, notes + replay off
+    //   • during a round → Play is locked (can't discard it), replay on
+    //   • between rounds → Play on, replay off
+    // Note buttons are handled separately: they stay enabled the whole
+    // game so the player can rehearse notes any time.
     function syncControls() {
       const active = game.roundActive();
       playBtn.disabled = active;
       replayBtn.disabled = !active;
-      noteButtons.forEach(b => b.disabled = !active);
+      noteButtons.forEach(b => b.disabled = !game.started);
     }
 
     function updateScoreboard() {
       scoreBox.textContent = game.scoreboardText();
     }
 
+    let advanceTimer = null; // pending auto-advance to the next round
+
     function startGame() {
       const mode = parseInt(modeSelect.value, 10);
       const rounds = Math.max(1, Math.min(50, parseInt(roundsInput.value || "10", 10)));
       const octave = parseInt(octaveSelect.value, 10);
 
+      clearTimeout(advanceTimer); // a reset cancels any pending auto-advance
       game.reset(mode, rounds, octave);
 
       statusEl.textContent = "Game started — Phase 1 (one note). Click 'Play Note'.";
@@ -365,7 +401,7 @@
       }
 
       game.octave = parseInt(octaveSelect.value, 10);
-      syncControls(); // a round is now active → lock Play, enable notes + replay
+      syncControls(); // a round is now active → lock Play, enable replay (notes already on)
 
       if (info.phase === 1) {
         playBtn.textContent = "Play Note";
@@ -397,15 +433,15 @@
         return;
       }
 
-      // The round's sequence is complete
+      // The round's sequence is complete — the attempt is logged.
       if (res.phase === 1) {
         statusEl.textContent = res.roundWon
-          ? `✅ Correct! Player ${res.player} scores. Click 'Play Note' for the next round.`
-          : `❌ Not this one. Click 'Play Note' for the next round.`;
+          ? `✅ Correct! Player ${res.player} scores.`
+          : `❌ Not this one.`;
       } else {
         statusEl.textContent = res.roundWon
-          ? `✅ BOTH notes right, in order! Player ${res.player} scores. Click 'Play 2 Notes' for the next round.`
-          : `❌ Not quite — you need both notes right, in order. Click 'Play 2 Notes' to try a new round.`;
+          ? `✅ BOTH notes right, in order! Player ${res.player} scores.`
+          : `❌ Not quite — you need both notes right, in order.`;
       }
 
       updateScoreboard();
@@ -421,8 +457,18 @@
         playBtn.textContent = "Play 2 Notes";
       }
 
-      // Round finished (not the game) → unlock Play for the next one.
-      syncControls();
+      // Attempt logged → after a short pause (to read the result), don't
+      // auto-play — just re-enable "Play Note" so the player controls when
+      // the next round's notes are heard.
+      statusEl.textContent += " Click 'Play Note' when you're ready for the next round.";
+      noteButtons.forEach(b => b.disabled = true); // no stray clicks in the pause
+      playBtn.disabled = true;
+      replayBtn.disabled = true;
+      clearTimeout(advanceTimer);
+      advanceTimer = setTimeout(() => {
+        if (!game.started || game.roundActive() || game.isFinished()) return;
+        syncControls(); // re-enables Play Note only; sound plays on click
+      }, 900);
     }
 
     document.getElementById("testToneBtn").addEventListener("click", async () => {
@@ -432,7 +478,7 @@
 
     startBtn.addEventListener("click", async () => {
       await unlockAudio();
-      startGame();
+      startGame(); // ready to go — player presses "Play Note" to hear round 1
     });
 
     playBtn.addEventListener("click", async () => {
@@ -454,14 +500,24 @@
     });
 
     // When the user clicks a note button:
-    // 1) we play THAT note immediately (instant feedback)
-    // 2) then we submit it as a guess (right or wrong)
+    //   • No round active yet (before "Play Note", or between rounds) →
+    //     just play that note so the player can rehearse the 7 sounds
+    //     as many times as they like. Nothing is submitted or scored.
+    //   • A round is active (after "Play Note") → play the note AND
+    //     submit it as this round's guess, as before.
     noteButtons.forEach(btn => {
       btn.addEventListener("click", async () => {
         await unlockAudio();
+        // Decide rehearsal-vs-guess from the state at CLICK time, not after
+        // the note finishes playing — otherwise a rehearsal click whose
+        // sound is still going when a round starts could get wrongly
+        // counted as that round's guess.
+        const wasRoundActive = game.roundActive();
         const octave = parseInt(octaveSelect.value, 10);
         await playNote(btn.dataset.note, octave, 0.5);
-        makeGuess(btn.dataset.note);
+        if (wasRoundActive) {
+          makeGuess(btn.dataset.note);
+        }
       });
     });
 
